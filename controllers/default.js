@@ -163,6 +163,11 @@ function db_remove(){
 	});
 
 }
+
+function db_add_view(){
+	this.view('add');
+}
+
 function db_view(){
 	Countries.findAll()
 	.then(val => 
