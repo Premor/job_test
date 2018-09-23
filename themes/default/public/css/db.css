@@ -1,5 +1,6 @@
-.boxf{
-    /* display: flex; */
+.rrow{
+    display: flex;
+    flex-direction: column;
 }
 .row{
     display: flex;

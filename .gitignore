@@ -2,3 +2,5 @@ databases/*
 node_modules/*
 *.nosql
 *.table
+tmp/
+*.pid

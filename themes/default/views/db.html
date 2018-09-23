@@ -7,13 +7,15 @@
         @{foreach m in model.data[0].dataValues}
             <div class="col">@{m.key}</div>
         @{end}
+        <div class="col">options</div>
         </div>
         
         @{foreach m in model.data}
             <div class="row">
             @{foreach e in m.dataValues}
-                <div class="col">@{e.value}</div>
+                <div class="col">@{e.value}</div>   
             @{end}
+            <div class="col"><a href="/db/delete?id=@{m.dataValues.id}">del</a></div>
             </div>
         @{end}
     </div>

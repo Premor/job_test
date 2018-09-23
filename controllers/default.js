@@ -11,7 +11,7 @@ exports.install = function() {
 	ROUTE('GET /db/', db_view);
 	ROUTE('GET /db/add/',db_add_view);
 	ROUTE('POST /db/add/',db_add);
-	ROUTE('POST /db/delete/',db_remove);
+	ROUTE('GET /db/delete/',db_remove);
 };
 
 const Sequelize = require('sequelize');
@@ -91,7 +91,8 @@ const Countries = sequelize.define('countries', {
 		defaultValue:''
 	},
 	citizenship_blocked:{
-		type: Sequelize.INTEGER
+		type: Sequelize.INTEGER,
+		defaultValue:0
 	}
   },
   {
@@ -149,19 +150,23 @@ function view_notices() {
 }
 
 function db_add(){
-	Countries.create({title_ru:'Тест'})
+	Countries.create(this.body)
 	.then((val)=>{this.json({ok:val})})
 	.catch((err)=>{this.json({err:err})})
 }
 function db_remove(){
-	Countries.destroy({title_ru:this.body.rem})
-	.then(val => 
-		{this.view('db',{ok:'Connection has been established successfully.',data:val});
+	if(this.query.id){
+	Countries.destroy({where:{id:this.query.id}})
+	.then(() => 
+		{this.redirect('/db/');
 	})
 	.catch(err => 
 		{this.view('db',{err:`Unable to connect to the database:${err}`});
 	});
-
+	}
+	else{
+		this.redirect('/');
+	}
 }
 
 function db_add_view(){
