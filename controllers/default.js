@@ -8,12 +8,20 @@ exports.install = function() {
 	ROUTE('/design/', '=design/index');
 
 	//new api
+	
 	ROUTE('GET /db/', db_view);
 	ROUTE('GET /db/add/',db_add_view);
 	ROUTE('POST /db/add/',db_add);
 	ROUTE('GET /db/delete/',db_remove);
 	ROUTE('GET /db/change/',db_add_view);
 	ROUTE('POST /db/change/',db_change);
+
+	ROUTE('GET /db/currencys/',db_currency)
+	ROUTE('GET /db/add_curr/',change_curr);
+	ROUTE('POST /db/add_curr/',db_add_curr);
+	ROUTE('GET /db/delete_curr/',db_remove_curr);
+	ROUTE('GET /db/change_curr/',change_curr);
+	ROUTE('POST /db/change_curr/',db_change_curr);
 };
 
 const Sequelize = require('sequelize');
@@ -30,6 +38,20 @@ const sequelize = new Sequelize(F.config['db-name'], F.config['db-user'], F.conf
 	},
   
   });
+
+const Currencys = sequelize.define('currencys',{
+	name:{
+		type: Sequelize.STRING,
+		defaultValue:''
+	},
+	title:{
+		type:Sequelize.STRING,
+		defaultValue:''
+	}
+},
+{
+  timestamps:false
+})
 
 const Countries = sequelize.define('countries', {
 	// id:{
@@ -101,6 +123,9 @@ const Countries = sequelize.define('countries', {
 	timestamps:false
   });
 Countries.sync();
+Currencys.sync();
+
+
 
 
 function view_cms() {
@@ -156,6 +181,13 @@ function db_add(){
 	.then((val)=>{this.json({ok:val})})
 	.catch((err)=>{this.json({err:err})})
 }
+
+function db_add_curr(){
+	Currencys.create(this.body)
+	.then((val)=>{this.json({ok:val})})
+	.catch((err)=>{this.json({err:err})})
+}
+
 function db_remove(){
 	if(this.query.id){
 	Countries.destroy({where:{id:this.query.id}})
@@ -192,6 +224,17 @@ function db_view(){
 	// 	this.json({err:`Unable to connect to the database:${err}`});
 	// });
 }
+
+function db_currency(){
+	Currencys.findAll()
+	.then(val => 
+		{this.view('db_currency',{ok:'Connection has been established successfully.',data:val});
+	})
+	.catch(err => 
+		{this.view('db_currency',{err:`Unable to connect to the database:${err}`});
+	})
+}
+
 function db_change(){
 	for (i in this.body)
 	{
@@ -210,5 +253,44 @@ function db_change(){
 	}
 	else{
 		this.redirect('/db/');
+	}
+}
+function change_curr(){
+	this.view('change_curr');
+}
+
+function db_remove_curr(){
+	if(this.query.id){
+	Currencys.destroy({where:{id:this.query.id}})
+	.then(() => 
+		{this.redirect('/db/currencys/');
+	})
+	.catch(err => 
+		{this.view('db_currency',{err:`Unable to connect to the database:${err}`});
+	});
+	}
+	else{
+		this.redirect('/');
+	}
+}
+
+function db_change_curr(){
+	for (i in this.body)
+	{
+		if(this.body[i]==''){
+			delete this.body[i];
+		}
+	}
+	if (this.query.id){
+		Currencys.update(this.body,{where:{id:this.query.id}})
+		.then(() => 
+		{this.redirect('/db/change_curr/');
+		})
+		.catch(err => 
+			{this.view('change_curr',{err:`Unable to connect to the database:${err}`});
+		});
+	}
+	else{
+		this.redirect('/db/change_curr/');
 	}
 }
