@@ -1,0 +1,22 @@
+@{import('db.css')}
+@{if model.err}
+    <p>Ошибка. @{model.err}</p>
+@{else}
+    <div class="boxf">
+        <div class="row">
+        @{foreach m in model.data[0].dataValues}
+            <div class="col">@{m.key}</div>
+        @{end}
+        </div>
+        
+        @{foreach m in model.data}
+            <div class="row">
+            @{foreach e in m.dataValues}
+                <div class="col">@{e.value}</div>
+            @{end}
+            </div>
+        @{end}
+    </div>
+@{fi}
+
+

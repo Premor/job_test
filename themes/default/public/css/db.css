@@ -1,0 +1,9 @@
+.boxf{
+    /* display: flex; */
+}
+.row{
+    display: flex;
+}
+.col{
+    flex-basis: 50%;
+}
