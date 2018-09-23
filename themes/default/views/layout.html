@@ -28,6 +28,7 @@
 					@{foreach m in global.navigations.mainmenu.children}
 						<a href="@{m.url}"@{if m.contains(url)} class="selected"@{fi}>@{if m.icon}<i class="fa fa-@{m.icon}"></i>@{fi}@{m.name}</a>
 					@{end}
+					<a href="/db/">DB</a>
 				</nav>
 			</div>
 		</div>
@@ -38,10 +39,11 @@
 			@{foreach m in sitemap()}
 				<li><a href="@{m.url}">@{if index === 0}<i class="fa fa-home"></i>@{fi}@{m.name}</a></li>
 			@{end}
+			
 		</ul>
-		@{body}
+		
 	</div>
-
+	@{body}
 	<footer>
 		<nav>
 		@{foreach m in global.navigations.mainmenu.children}

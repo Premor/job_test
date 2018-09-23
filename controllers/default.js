@@ -12,6 +12,8 @@ exports.install = function() {
 	ROUTE('GET /db/add/',db_add_view);
 	ROUTE('POST /db/add/',db_add);
 	ROUTE('GET /db/delete/',db_remove);
+	ROUTE('GET /db/change/',db_add_view);
+	ROUTE('POST /db/change/',db_change);
 };
 
 const Sequelize = require('sequelize');
@@ -189,4 +191,24 @@ function db_view(){
 	// .catch(err => {
 	// 	this.json({err:`Unable to connect to the database:${err}`});
 	// });
+}
+function db_change(){
+	for (i in this.body)
+	{
+		if(this.body[i]==''){
+			delete this.body[i];
+		}
+	}
+	if (this.query.id){
+		Countries.update(this.body,{where:{id:this.query.id}})
+		.then(() => 
+		{this.redirect('/db/');
+		})
+		.catch(err => 
+			{this.view('db',{err:`Unable to connect to the database:${err}`});
+		});
+	}
+	else{
+		this.redirect('/db/');
+	}
 }

@@ -2,12 +2,14 @@
 @{if model.err}
     <p>Ошибка. @{model.err}</p>
 @{else}
+    <a href="/db/add/">Добавить</a>
     <div class="boxf">
         <div class="row">
         @{foreach m in model.data[0].dataValues}
             <div class="col">@{m.key}</div>
         @{end}
-        <div class="col">options</div>
+        <div class="col">upd</div>
+        <div class="col">del</div>
         </div>
         
         @{foreach m in model.data}
@@ -15,6 +17,7 @@
             @{foreach e in m.dataValues}
                 <div class="col">@{e.value}</div>   
             @{end}
+            <div class="col"><a href="/db/change?id=@{m.dataValues.id}">upd</a></div>
             <div class="col"><a href="/db/delete?id=@{m.dataValues.id}">del</a></div>
             </div>
         @{end}
