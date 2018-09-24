@@ -1,8 +1,8 @@
-@{import('db.css')}
+@{import('db.css','db_add.js')}
 @{if model.err}
     <p>Ошибка. @{model.err}</p>
 @{else}
-    <a href="/db/add/">Добавить</a>
+    <button value="Добавить" name="add">Добавить</button>
     <div class="boxf">
         <div class="row">
         @{foreach m in model.data[0].dataValues}
