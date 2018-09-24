@@ -1,4 +1,4 @@
-@{import('db.css','db_add.js')}
+@{import('db.css','db.js')}
 @{if model.err}
     <p>Ошибка. @{model.err}</p>
 @{else}
@@ -17,8 +17,8 @@
             @{foreach e in m.dataValues}
                 <div class="col">@{e.value}</div>   
             @{end}
-            <div class="col"><a href="/db/change?id=@{m.dataValues.id}">upd</a></div>
-            <div class="col"><a href="/db/delete?id=@{m.dataValues.id}">del</a></div>
+            <div class="col"><button value="@{m.dataValues.id}" name="change">upd</button></div>
+            <div class="col"><button value="@{m.dataValues.id}" name="delete">del</button></div>
             </div>
         @{end}
     </div>

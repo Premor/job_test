@@ -122,3 +122,11 @@ module.exports.destroy = (table,options={})=>{
     }
     return ret;
 }
+module.exports.update = (table,val,options={})=>{
+    let ret;
+    switch(table){
+        case 'currencys':  ret = Currencys.update(val,options); break;
+        case 'countries': ret = Countries.update(val,options); break;
+    }
+    return ret;
+}

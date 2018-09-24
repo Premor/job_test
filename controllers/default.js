@@ -9,27 +9,16 @@ exports.install = function () {
 
 	//new api
 	ROUTE('GET /',db_select)
-	//ROUTE('POST /db/', db_select);
+	//select table
 	ROUTE('GET /db/', db_select_view);
 	
+	//func for table
 	ROUTE('GET /db/add/{table}/', db_add_view);
 	ROUTE('POST /db/add/{table}/', db_add);
-	ROUTE('GET /db/delete/', db_remove);
-	ROUTE('GET /db/change/', db_add_view);
-	ROUTE('POST /db/change/', db_change);
-
-	ROUTE('GET /db/view/{table}/', db_view)
-
-
-
-	ROUTE('GET /db/currencys/', db_currency)
-	ROUTE('GET /db/add_curr/', change_curr);
-	ROUTE('POST /db/add_curr/', db_add_curr);
-	ROUTE('GET /db/delete_curr/', db_remove_curr);
-	ROUTE('GET /db/change_curr/', change_curr);
-	ROUTE('POST /db/change_curr/', db_change_curr);
-
-	
+	ROUTE('GET /db/delete/{table}/', db_remove);
+	ROUTE('GET /db/change/{table}/', db_add_view);
+	ROUTE('POST /db/change/{table}/', db_change);
+	ROUTE('GET /db/view/{table}/', db_view);
 };
 
 const DB = require('../modules/db');
@@ -94,8 +83,6 @@ function view_notices() {
 
 
 function db_add(table) {
-	switch (table) {
-		case 'countries':
 			DB.create(table,this.body)
 			.then((val) => {
 				this.json({
@@ -107,48 +94,19 @@ function db_add(table) {
 					err: err
 				});
 			});
-			break;
-		case 'currencys':
-			DB.create(table,this.body)
-			.then((val) => {
-				this.json({
-					ok: val
-				});
-			})
-			.catch((err) => {
-				this.json({
-					err: err
-				});
-			});
-			break;
-		default:
-			this.json({err:'Not found'});
-	}
+			
 }
 
-function db_add_curr() {
-	Currencys.create(this.body)
-		.then((val) => {
-			this.json({
-				ok: val
-			})
-		})
-		.catch((err) => {
-			this.json({
-				err: err
-			})
-		})
-}
 
-function db_remove() {
+function db_remove(table) {
 	if (this.query.id) {
-		Countries.destroy({
+		DB.destroy(table,{
 				where: {
 					id: this.query.id
 				}
 			})
 			.then(() => {
-				this.redirect('/db/');
+				this.redirect(`/db/view/${table}/`);
 			})
 			.catch(err => {
 				this.view('db', {
@@ -182,38 +140,6 @@ function db_view(table){
 										err: `Unable to connect to the database:${err}`
 									});
 								});
-	// switch (table) {
-	// 	case 'countries':
-	// 		DB.findAll(table)
-	// 			.then(val => {
-	// 				this.view('db', {
-	// 					ok: 'Connection has been established successfully.',
-	// 					data: val
-	// 				});
-	// 			})
-	// 			.catch(err => {
-	// 				this.view('db', {
-	// 					err: `Unable to connect to the database:${err}`
-	// 				});
-	// 			});
-	// 		break;
-	// 	case 'currencys':
-	// 		DB.findAll(table)
-	// 			.then(val => {
-	// 				this.view('db', {
-	// 					ok: 'Connection has been established successfully.',
-	// 					data: val
-	// 				});
-	// 			})
-	// 			.catch(err => {
-	// 				this.view('db', {
-	// 					err: `Unable to connect to the database:${err}`
-	// 				});
-	// 			});
-	// 		break;
-	// 	default:
-			
-	// }
 }
 
 function db_select() {
@@ -225,36 +151,20 @@ function db_select() {
 
 ////////////////////////////////////////
 
-
-function db_currency() {
-	DB.findAll('currencys')
-		.then(val => {
-			this.view('db_currency', {
-				ok: 'Connection has been established successfully.',
-				data: val
-			});
-		})
-		.catch(err => {
-			this.view('db_currency', {
-				err: `Unable to connect to the database:${err}`
-			});
-		})
-}
-
-function db_change() {
+function db_change(table) {
 	for (i in this.body) {
 		if (this.body[i] == '') {
 			delete this.body[i];
 		}
 	}
 	if (this.query.id) {
-		Countries.update(this.body, {
+		DB.update(table,this.body, {
 				where: {
 					id: this.query.id
 				}
 			})
 			.then(() => {
-				this.redirect('/db/');
+				this.redirect(`/db/view/${table}/`);
 			})
 			.catch(err => {
 				this.view('db', {
@@ -263,54 +173,5 @@ function db_change() {
 			});
 	} else {
 		this.redirect('/db/');
-	}
-}
-
-function change_curr() {
-	this.view('change_curr');
-}
-
-function db_remove_curr() {
-	if (this.query.id) {
-		Currencys.destroy({
-				where: {
-					id: this.query.id
-				}
-			})
-			.then(() => {
-				this.redirect('/db/currencys/');
-			})
-			.catch(err => {
-				this.view('db_currency', {
-					err: `Unable to connect to the database:${err}`
-				});
-			});
-	} else {
-		this.redirect('/');
-	}
-}
-
-function db_change_curr() {
-	for (i in this.body) {
-		if (this.body[i] == '') {
-			delete this.body[i];
-		}
-	}
-	if (this.query.id) {
-		Currencys.update(this.body, {
-				where: {
-					id: this.query.id
-				}
-			})
-			.then(() => {
-				this.redirect('/db/change_curr/');
-			})
-			.catch(err => {
-				this.view('change_curr', {
-					err: `Unable to connect to the database:${err}`
-				});
-			});
-	} else {
-		this.redirect('/db/change_curr/');
 	}
 }
