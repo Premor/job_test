@@ -15,7 +15,13 @@
         @{foreach m in model.data}
             <div class="row">
             @{foreach e in m.dataValues}
-                <div class="col">@{e.value}</div>   
+                @{if e.value.dataValues}
+                    @{foreach iner_e in e.value.dataValues}
+                        <div class="col">@{iner_e.value}</div>
+                    @{end}
+                @{else}
+                    <div class="col">@{e.value}</div>
+                @{fi}   
             @{end}
             <div class="col"><button value="@{m.dataValues.id}" name="change">upd</button></div>
             <div class="col"><button value="@{m.dataValues.id}" name="delete">del</button></div>

@@ -8,10 +8,10 @@ exports.install = function () {
 	ROUTE('/design/', '=design/index');
 
 	//new api
-	ROUTE('GET /',db_select)
+	ROUTE('GET /', db_select)
 	//select table
 	ROUTE('GET /db/', db_select_view);
-	
+
 	//func for table
 	ROUTE('GET /db/add/{table}/', db_add_view);
 	ROUTE('POST /db/add/{table}/', db_add);
@@ -83,24 +83,24 @@ function view_notices() {
 
 
 function db_add(table) {
-			DB.create(table,this.body)
-			.then((val) => {
-				this.json({
-					ok: val
-				});
-			})
-			.catch((err) => {
-				this.json({
-					err: err
-				});
+	DB.create(table, this.body)
+		.then((val) => {
+			this.json({
+				ok: val
 			});
-			
+		})
+		.catch((err) => {
+			this.json({
+				err: err
+			});
+		});
+
 }
 
 
 function db_remove(table) {
 	if (this.query.id) {
-		DB.destroy(table,{
+		DB.destroy(table, {
 				where: {
 					id: this.query.id
 				}
@@ -122,28 +122,51 @@ function db_add_view(table) {
 	this.view(`add_${table}`);
 }
 
-function db_select_view(){
+function db_select_view() {
 	this.view('select-table');
 }
 
-function db_view(table){
-	console.log('VIEW',table)
-	DB.findAll(table)
-				.then(val => {
-					this.view('db', {
-						ok: 'Connection has been established successfully.',
-						data: val
-					});
-				})
-				.catch(err => {
-									this.view('db', {
-										err: `Unable to connect to the database:${err}`
-									});
-								});
+function db_view(table) {
+	console.log('VIEW', table);
+	let options={};
+	switch(table){
+	
+		case 'likvid_book':options={include:[{
+			model:DB.tables[DB.tables.length-1],
+			required:true,
+			attributes:['name']
+		}]}
+		// case 'likvid_book':DB.seq.query('SELECT nekrus_ecofin_lk.likvid_book.fond_id,nekrus_ecofin_lk.likvid_book.akciacount,nekrus_ecofin_lk.likvid_book.likvidstoim,nekrus_ecofin_lk.fonds.name FROM nekrus_ecofin_lk.likvid_book left outer join nekrus_ecofin_lk.fonds on nekrus_ecofin_lk.fonds.id = nekrus_ecofin_lk.likvid_book.fond_id',{model:DB.tables[DB.tables.length-2]}).then(val => {
+		// 	if (!val){throw Error('haven\'t value')}
+		// 	this.view('db', {
+		// 		ok: 'Connection has been established successfully.',
+		// 		data: val
+		// 	});
+		// }) ; break;
+
+
+
+
+	default:
+	}	
+	DB.findAll(table,options)
+		.then(val => {
+			if (!val){throw Error('haven\'t value')}
+			this.view('db', {
+				ok: 'Connection has been established successfully.',
+				data: val
+			});
+		})
+		.catch(err => {
+			this.view('db', {
+				err: `Unable to connect to the database:${err}`
+			});
+		});
+	
 }
 
 function db_select() {
-	console.log('SELECT',this.body.table);
+	console.log('SELECT', this.body.table);
 	this.redirect(`/db/view/${this.body.table}`);
 }
 
@@ -158,7 +181,7 @@ function db_change(table) {
 		}
 	}
 	if (this.query.id) {
-		DB.update(table,this.body, {
+		DB.update(table, this.body, {
 				where: {
 					id: this.query.id
 				}
