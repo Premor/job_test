@@ -116,11 +116,13 @@ const Likvid_book = sequelize.define('likvid_book',{
 },{
     freezeTableName: true,
     timestamps:false,
-    // classMethods: {
-    //     associate: function(models) {
-    //         Fond.hasMany( models.likvid_book);
-    //     }
-    // }
+    getterMethods: {
+        pay_price() {
+            console.log(this);
+            
+          return parseFloat(this.likvidstoim) / parseFloat(this.akciacount);
+        }
+      },
 });
 const Fond = sequelize.define('fonds',{
     name:{
@@ -346,7 +348,7 @@ const Investors = sequelize.define('investors',{
 },{
     getterMethods: {
         fullName() {
-          return `${this.getDataValue('first_name')} ${this.getDataValue('middle_name')} ${this.getDataValue('last_name')}`
+          return `${this.first_name} ${this.middle_name} ${this.last_name}`
         }
       },
     freezeTableName:true,
@@ -382,9 +384,9 @@ const Fonds_map = sequelize.define('fonds_map',{
 });
 //Fond.hasMany(Likvid_book,{foreignKey:'fond_id',sourceKey:'name',targetKey:'name'});
 Likvid_book.belongsTo(Fond,{foreignKey:'fond_id'});
-Fond.belongsTo(Investors,{foreignKey:'upravl_id'});
+Fond.belongsTo(Investors,{foreignKey:'upravl_id',as:'Управляющий',});
 Fonds_map.belongsTo(Fond,{foreignKey:'fond_id'});
-Fonds_map.belongsTo(Investors,{foreignKey:'investor_id'});
+Fonds_map.belongsTo(Investors,{foreignKey:'investor_id',as:'Инвестор'});
 
 
 Countries.sync();
