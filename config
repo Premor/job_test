@@ -18,4 +18,4 @@ default-theme             : default
 
 db-user :   hello
 db-password : 1a2b3c4d
-db-name :   nekrus_ecofin_lk
+db-name :   test

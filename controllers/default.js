@@ -128,30 +128,70 @@ function db_select_view() {
 
 function db_view(table) {
 	console.log('VIEW', table);
-	let options={};
-	switch(table){
-	
-		case 'likvid_book':options={include:[{
-			model:DB.tables[DB.tables.length-1],
-			required:true,
-			attributes:['name']
-		}]}
-		// case 'likvid_book':DB.seq.query('SELECT nekrus_ecofin_lk.likvid_book.fond_id,nekrus_ecofin_lk.likvid_book.akciacount,nekrus_ecofin_lk.likvid_book.likvidstoim,nekrus_ecofin_lk.fonds.name FROM nekrus_ecofin_lk.likvid_book left outer join nekrus_ecofin_lk.fonds on nekrus_ecofin_lk.fonds.id = nekrus_ecofin_lk.likvid_book.fond_id',{model:DB.tables[DB.tables.length-2]}).then(val => {
-		// 	if (!val){throw Error('haven\'t value')}
-		// 	this.view('db', {
-		// 		ok: 'Connection has been established successfully.',
-		// 		data: val
-		// 	});
-		// }) ; break;
+	let options;
+	switch (table) {
+		case 'countries':
+			options = {
+				attributes:[['title_ru','Наименование на русском'],['title_en','Наименование на английском'],['citizenship_blocked','Запрет гражданства']]
+			}
+			break;
+		case 'fonds': options = {
+				include:[{
+					//as:'Управляющий',
+					model:DB.tables.investors,
+					required:true,
+					attributes:['first_name']
+				}],
+				attributes:[['name','Идентификатор'],['title','Наименование'],['invest_idea','Идея'],['invest_idea_date_end','Дата окончания идеи'],['published','Публиковать'],['ordering','Порядок']],
+				
+		};break;
+
+		case 'likvid_book':
+			options = {
+				include: [{
+					model: DB.tables.fond,
+					required: true,
+					attributes: ['name']
+				}]
+			};
+			break;
+		case 'fonds_map': options = {
+				attributes:[['voznagrupravl','Вознаграждения управляющего, %'],['dolariska','Доля риска, %'],['dolariska_information','Информировать при риске, %'],['protection','Защита капитала, USD']],
+				include: [{
+					model: DB.tables.fond,
+					required: true,
+					attributes: ['name']
+				},
+				{
+					model: DB.tables.investors,
+					required: true,
+					attributes: ['first_name']
+				}]
+		};break;
+		case 'investors': options = {
+			attributes:['balance','first_name','middle_name','last_name']
+		};break;
+
+
+			// case 'likvid_book':DB.seq.query('SELECT nekrus_ecofin_lk.likvid_book.fond_id,nekrus_ecofin_lk.likvid_book.akciacount,nekrus_ecofin_lk.likvid_book.likvidstoim,nekrus_ecofin_lk.fonds.name FROM nekrus_ecofin_lk.likvid_book left outer join nekrus_ecofin_lk.fonds on nekrus_ecofin_lk.fonds.id = nekrus_ecofin_lk.likvid_book.fond_id',{model:DB.tables[DB.tables.length-2]}).then(val => {
+			// 	if (!val){throw Error('haven\'t value')}
+			// 	this.view('db', {
+			// 		ok: 'Connection has been established successfully.',
+			// 		data: val
+			// 	});
+			// }) ; break;
 
 
 
 
-	default:
-	}	
-	DB.findAll(table,options)
+		default:
+			options = {};
+	}
+	DB.findAll(table, options)
 		.then(val => {
-			if (!val){throw Error('haven\'t value')}
+			if (!val) {
+				throw Error('haven\'t value')
+			}
 			this.view('db', {
 				ok: 'Connection has been established successfully.',
 				data: val
@@ -162,7 +202,7 @@ function db_view(table) {
 				err: `Unable to connect to the database:${err}`
 			});
 		});
-	
+
 }
 
 function db_select() {

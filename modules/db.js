@@ -89,8 +89,8 @@ const Countries = sequelize.define('countries', {
 		defaultValue: ''
 	},
 	citizenship_blocked: {
-		type: Sequelize.INTEGER,
-		defaultValue: 0
+		type:Sequelize.BOOLEAN,
+        defaultValue:false
 	}
 }, {
     freezeTableName: true,
@@ -118,11 +118,11 @@ const Likvid_book = sequelize.define('likvid_book',{
     timestamps:false,
     // classMethods: {
     //     associate: function(models) {
-    //         Found.hasMany( models.likvid_book);
+    //         Fond.hasMany( models.likvid_book);
     //     }
     // }
 });
-const Found = sequelize.define('fonds',{
+const Fond = sequelize.define('fonds',{
     name:{
         type:Sequelize.STRING,
         defaultValue:''
@@ -140,19 +140,21 @@ const Found = sequelize.define('fonds',{
         
     },
     published:{
-        type:Sequelize.INTEGER({length:1}),
-        defaultValue:0
+        type:Sequelize.BOOLEAN,
+        defaultValue:false
+        // type:Sequelize.INTEGER({length:1}),
+        // defaultValue:0
     },
     invest_idea:{
-        type:Sequelize.INTEGER({length:1}),
-        defaultValue:0
+        type:Sequelize.BOOLEAN,
+        defaultValue:false
     },
     invest_idea_date_end:{
         type:Sequelize.DATE,
         
     },
     doc:{
-        type:Sequelize.STRING,
+        type:Sequelize.TEXT,
         defaultValue:''
     },
     information:{
@@ -199,21 +201,207 @@ const Found = sequelize.define('fonds',{
     timestamps:false,
     // classMethods: {
     //     associate: function(models) {
-    //         Found.hasMany( models.likvid_book);
+    //         Fond.hasMany( models.likvid_book);
     //     }
     // }
 });
-//Found.hasMany(Likvid_book,{foreignKey:'fond_id',sourceKey:'name',targetKey:'name'});
-Likvid_book.belongsTo(Found,{foreignKey:'fond_id'});
+const Investors = sequelize.define('investors',{
+    first_name:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    middle_name:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    last_name:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    brithday:{
+        type:Sequelize.DATE,
+        
+    },
+    pasport_number:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    pasport_company:{
+        type:Sequelize.TEXT,
+        defaultValue:''
+    },
+    pasport_company_code:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    pasport_date:{
+        type:Sequelize.DATE,
+        
+    },
+    company:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    personal_number:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    email:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    phone:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    password:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    pasport:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    pasport_params:{
+        type:Sequelize.TEXT,
+        defaultValue:''
+    },
+    country_id:{
+        type:Sequelize.INTEGER,
+        
+    },
+    citizenship_country_id:{
+        type:Sequelize.INTEGER,
+        
+    },
+    city:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    addres:{
+        type:Sequelize.TEXT,
+        defaultValue:''
+    },
+    balance:{
+        type:Sequelize.DOUBLE,
+        defaultValue:0.0
+    },
+    time_reg:{
+        type:Sequelize.DATE,
+        
+    },
+    save_me_code:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    activation_code:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    recovery_code:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    enable:{
+        type:Sequelize.BOOLEAN,
+        defaultValue:false
+    },
+    accept_contrakt:{
+        type:Sequelize.BOOLEAN,
+        defaultValue:false
+    },
+    personal_document:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    personal_document_number:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    personal_document_true:{
+        type:Sequelize.BOOLEAN,
+        defaultValue:false
+    },
+    file_open_lc:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    personal_anketa_file:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    manager_id:{
+        type:Sequelize.INTEGER,
+        
+    },
+    blank_anketa_file:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    registration_date:{
+        type:Sequelize.DATE,
+        
+    },
+    
+},{
+    getterMethods: {
+        fullName() {
+          return `${this.getDataValue('first_name')} ${this.getDataValue('middle_name')} ${this.getDataValue('last_name')}`
+        }
+      },
+    freezeTableName:true,
+    timestamps:false
+});
+const Fonds_map = sequelize.define('fonds_map',{
+    fond_id:{
+        type:Sequelize.INTEGER,
+    },
+    investor_id:{
+        type:Sequelize.INTEGER,
+    },
+    voznagrupravl:{
+        type:Sequelize.FLOAT,
+        defaultValue:0.0
+    },
+    dolariska:{
+        type:Sequelize.FLOAT,
+        defaultValue:0.0
+    },
+    dolariska_information:{
+        type:Sequelize.FLOAT,
+        defaultValue:0.0
+    },
+    protection:{
+        type:Sequelize.DOUBLE,
+        defaultValue:0.0
+    },
+    
+},{
+    freezeTableName:true,
+    timestamps:false
+});
+//Fond.hasMany(Likvid_book,{foreignKey:'fond_id',sourceKey:'name',targetKey:'name'});
+Likvid_book.belongsTo(Fond,{foreignKey:'fond_id'});
+Fond.belongsTo(Investors,{foreignKey:'upravl_id'});
+Fonds_map.belongsTo(Fond,{foreignKey:'fond_id'});
+Fonds_map.belongsTo(Investors,{foreignKey:'investor_id'});
+
 
 Countries.sync();
 Currencys.sync();
 Likvid_book.sync();
-Found.sync();
-
+Fond.sync();
+Investors.sync();
+Fonds_map.sync();
 
 module.exports.seq = sequelize;
-module.exports.tables = [Countries,Currencys,Likvid_book,Found];
+module.exports.tables = {countries:Countries,
+    currencys:Currencys,
+    likvid_book:Likvid_book,
+    fond:Fond,
+    investors:Investors,
+    fonds_map:Fonds_map,
+};
 
 module.exports.findAll = (table,options={})=>{
     let ret;
@@ -221,7 +409,9 @@ module.exports.findAll = (table,options={})=>{
         case 'currencys':  ret = Currencys.findAll(options); break;
         case 'countries': ret = Countries.findAll(options); break;
         case 'likvid_book': ret = Likvid_book.findAll(options);break;
-        case 'fonds': ret = Found.findAll(options);break;
+        case 'fonds': ret = Fond.findAll(options);break;
+        case 'investors': ret = Investors.findAll(options);break;
+        case 'fonds_map': ret = Fonds_map.findAll(options);break;
     }
     return ret;
 }
@@ -232,7 +422,9 @@ module.exports.create = (table,options={})=>{
         case 'currencys':  ret = Currencys.create(options); break;
         case 'countries': ret = Countries.create(options); break;
         case 'likvid_book': ret = Likvid_book.create(options);break;
-        case 'fonds': ret = Found.create(options);break;
+        case 'fonds': ret = Fond.create(options);break;
+        case 'investors': ret = Investors.findAll(options);break;
+        case 'fonds_map': ret = Fonds_map.findAll(options);break;
     }
     return ret;
 }
@@ -242,7 +434,9 @@ module.exports.destroy = (table,options={})=>{
         case 'currencys':  ret = Currencys.destroy(options); break;
         case 'countries': ret = Countries.destroy(options); break;
         case 'likvid_book': ret = Likvid_book.destroy(options);break;
-        case 'fonds': ret = Found.destroy(options);break;
+        case 'fonds': ret = Fond.destroy(options);break;
+        case 'investors': ret = Investors.findAll(options);break;
+        case 'fonds_map': ret = Fonds_map.findAll(options);break;
     }
     return ret;
 }
@@ -252,7 +446,9 @@ module.exports.update = (table,val,options={})=>{
         case 'currencys':  ret = Currencys.update(val,options); break;
         case 'countries': ret = Countries.update(val,options); break;
         case 'likvid_book': ret = Likvid_book.update(val,options);break;
-        case 'fonds': ret = Found.update(val,options);break;
+        case 'fonds': ret = Fond.update(val,options);break;
+        case 'investors': ret = Investors.findAll(val,options);break;
+        case 'fonds_map': ret = Fonds_map.findAll(options);break;
     }
     return ret;
 }
