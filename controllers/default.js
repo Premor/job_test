@@ -12,6 +12,12 @@ exports.install = function () {
 	//select table
 	ROUTE('GET /db/', db_select_view);
 
+	//func admin
+	ROUTE('GET /functions/add-money/',add_money_view);
+	ROUTE('POST /functions/add-money/',add_money);
+
+	ROUTE('GET /client/add/',client_add_view);
+	ROUTE('POST /client/add/',client_add,['upload'],50000);
 	//func for table
 	ROUTE('GET /db/add/{table}/', db_add_view);
 	ROUTE('POST /db/add/{table}/', db_add);
@@ -157,13 +163,22 @@ function db_view(table) {
 					['published', 'Публиковать'],
 					['ordering', 'Порядок']
 				],
+				order: [
+					['name']
+				]
 
 			};
 			break;
 
 		case 'likvid_book':
 			options = {
-				attributes:[['akciacount','Кол-во паёв'],['likvidstoim','Средства'],['likvidstoim','Цена пая'],['voznagrupravl','Вознаграждение управляющему'],['time','Время']],
+				attributes: [
+					['akciacount', 'Кол-во паёв'],
+					['likvidstoim', 'Средства'],
+					['likvidstoim', 'Цена пая'],
+					['voznagrupravl', 'Вознаграждение управляющему'],
+					['time', 'Время']
+				],
 				include: [{
 					model: DB.tables.fond,
 					required: true,
@@ -186,7 +201,7 @@ function db_view(table) {
 					},
 					{
 						model: DB.tables.investors,
-						as:'Инвестор',
+						as: 'Инвестор',
 						required: true,
 						attributes: ['first_name', 'middle_name', 'last_name', ['first_name', 'full_name']]
 					}
@@ -195,7 +210,7 @@ function db_view(table) {
 			break;
 		case 'investors':
 			options = {
-				attributes: ['balance', 'first_name', 'middle_name', 'last_name',]
+				attributes: ['balance', 'first_name', 'middle_name', 'last_name', ]
 			};
 			break;
 
@@ -220,27 +235,30 @@ function db_view(table) {
 			switch (table) {
 				case 'fonds':
 					for (i of val) {
-						
+
 						i.dataValues['Управляющий'].dataValues.full_name = i.dataValues['Управляющий'].fullName;
 						delete i.dataValues['Управляющий'].dataValues.first_name;
 						delete i.dataValues['Управляющий'].dataValues.middle_name;
 						delete i.dataValues['Управляющий'].dataValues.last_name;
 						// data.push(i.dataValues);
-					};break;
+					};
+					break;
 				case 'fonds_map':
-				for (i of val) {
-					
-					i.dataValues['Инвестор'].dataValues.full_name = i.dataValues['Инвестор'].fullName;
-					delete i.dataValues['Инвестор'].dataValues.first_name;
-					delete i.dataValues['Инвестор'].dataValues.middle_name;
-					delete i.dataValues['Инвестор'].dataValues.last_name;
-					// data.push(i.dataValues);
-				};break;
+					for (i of val) {
+
+						i.dataValues['Инвестор'].dataValues.full_name = i.dataValues['Инвестор'].fullName;
+						delete i.dataValues['Инвестор'].dataValues.first_name;
+						delete i.dataValues['Инвестор'].dataValues.middle_name;
+						delete i.dataValues['Инвестор'].dataValues.last_name;
+						// data.push(i.dataValues);
+					};
+					break;
 				case 'likvid_book':
-					// for(i of val){
-						val[0].dataValues['Цена пая']=val[0].pay_price
-						//i.dataValues.pray
-					//}
+					for(i of val){
+					i.dataValues['Цена пая'] = i.pay_price
+					//console.log(val[0])
+					//i.dataValues.pray
+					}
 			}
 			this.view('db', {
 				ok: 'Connection has been established successfully.',
@@ -287,4 +305,43 @@ function db_change(table) {
 	} else {
 		this.redirect('/db/');
 	}
+}
+
+
+function client_add_view(){
+	this.view('client/add');
+}
+
+function client_add(){
+	console.log(this.body)
+	DB.create('investors',this.body)
+	.then((val) => {
+		this.json({
+			ok: val
+		});
+	})
+	.catch((err) => {
+		this.json({
+			err: err
+		});
+	});
+}
+
+function add_money_view(){
+	DB.findAll('fonds',{attributes:['id','name']})
+	.then((val)=>{let data=[];for (i of val){data.push(i.dataValues)}; this.view('functions/add_money',data);})
+	
+}
+
+function add_money(){
+	let money = parseInt(this.body.money);
+	if (money){
+		DB.findAll('likvid_book',{limit:1,order:[['time','DESC']]})
+		.then((val)=>{let buf=val[0].dataValues; buf.likvidstoim+=money;buf.time = Date.now();delete buf.id;return DB.create('likvid_book',buf) })
+		.then((val)=>{this.json({ok:val})})
+		.catch((err)=>{this.json({err:err})})
+	}
+
+		//this.json({ok:'KAEF'});}
+	else {this.json({err:'Parasha',val:typeof money})};
 }

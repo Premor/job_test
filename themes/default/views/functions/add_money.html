@@ -1,0 +1,9 @@
+<form action="" method="post">
+    <select name="fond">
+        @{foreach m in model}
+            <option value="@{m.id}">@{m.name}</option>
+        @{end}
+    </select>
+    <input type="text" name="money">
+    <input type="submit" value="Вкинуть бабла">
+</form>

@@ -117,10 +117,13 @@ const Likvid_book = sequelize.define('likvid_book',{
     freezeTableName: true,
     timestamps:false,
     getterMethods: {
+        payPrice(){
+            return this.likvidstoim/this.akciacount
+        },
         pay_price() {
-            console.log(this);
+            console.log("IN PRICE",this);
             
-          return parseFloat(this.likvidstoim) / parseFloat(this.akciacount);
+          return this.dataValues['Средства'] / this.dataValues['Кол-во паёв'];
         }
       },
 });
@@ -418,15 +421,15 @@ module.exports.findAll = (table,options={})=>{
     return ret;
 }
 
-module.exports.create = (table,options={})=>{
+module.exports.create = (table,val,options={})=>{
     let ret;
     switch(table){
-        case 'currencys':  ret = Currencys.create(options); break;
-        case 'countries': ret = Countries.create(options); break;
-        case 'likvid_book': ret = Likvid_book.create(options);break;
-        case 'fonds': ret = Fond.create(options);break;
-        case 'investors': ret = Investors.findAll(options);break;
-        case 'fonds_map': ret = Fonds_map.findAll(options);break;
+        case 'currencys':  ret = Currencys.create(val,options); break;
+        case 'countries': ret = Countries.create(val,options); break;
+        case 'likvid_book': ret = Likvid_book.create(val,options);break;
+        case 'fonds': ret = Fond.create(val,options);break;
+        case 'investors': ret = Investors.create(val,options);break;
+        case 'fonds_map': ret = Fonds_map.create(val,options);break;
     }
     return ret;
 }
@@ -437,8 +440,8 @@ module.exports.destroy = (table,options={})=>{
         case 'countries': ret = Countries.destroy(options); break;
         case 'likvid_book': ret = Likvid_book.destroy(options);break;
         case 'fonds': ret = Fond.destroy(options);break;
-        case 'investors': ret = Investors.findAll(options);break;
-        case 'fonds_map': ret = Fonds_map.findAll(options);break;
+        case 'investors': ret = Investors.destroy(options);break;
+        case 'fonds_map': ret = Fonds_map.destroy(options);break;
     }
     return ret;
 }

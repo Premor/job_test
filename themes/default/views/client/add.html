@@ -1,0 +1,602 @@
+<form method='post' enctype='multipart/form-data'>
+    <table class='fields'>
+        <tr class='field-text field-name-balance'>
+            <th>Баланс</th>
+            <td><input type='text' name='balance' value='' /></td>
+        </tr>
+        <tr class='field-text field-name-investion'>
+            <th>Инвестировано средств</th>
+            <td><input type='text' name='investion' value='' readonly='readonly' /></td>
+        </tr>
+        <tr class='field-text field-name-first_name'>
+            <th>Имя</th>
+            <td><input type='text' name='first_name' value='' /></td>
+        </tr>
+        <tr class='field-text field-name-middle_name'>
+            <th>Отчество</th>
+            <td><input type='text' name='middle_name' value='' /></td>
+        </tr>
+        <tr class='field-text field-name-last_name'>
+            <th>Фамилия</th>
+            <td><input type='text' name='last_name' value='' /></td>
+        </tr>
+        <tr class='field-date field-name-brithday'>
+            <th>День рождения (ДД-ММ-ГГГГ)</th>
+            <td><input type='text' name='brithday' value='' /></td>
+        </tr>
+        <tr class='field-text field-name-pasport_number'>
+            <th>Серия и номер паспорта</th>
+            <td><input type='text' name='pasport_number' value='' /></td>
+        </tr>
+        <tr class='field-text field-name-pasport_company'>
+            <th>Кем выдан паспорт</th>
+            <td><input type='text' name='pasport_company' value='' /></td>
+        </tr>
+        <tr class='field-text field-name-pasport_company_code'>
+            <th>Код подразделения, выдавшего паспорт</th>
+            <td><input type='text' name='pasport_company_code' value='' /></td>
+        </tr>
+        <tr class='field-text field-name-pasport_date'>
+            <th>Дата выдачи паспорта</th>
+            <td><input type='text' name='pasport_date' value='' /></td>
+        </tr>
+        <tr class='field-text field-name-company'>
+            <th>Организация</th>
+            <td><input type='text' name='company' value='' /></td>
+        </tr>
+        <tr class='field-text field-name-personal_number'>
+            <th>Лицевой счет</th>
+            <td><input type='text' name='personal_number' value='' /></td>
+        </tr>
+        <tr class='field-text field-name-email'>
+            <th>E-Mail</th>
+            <td><input type='text' name='email' value='' /></td>
+        </tr>
+        <tr class='field-text field-name-phone'>
+            <th>Телефон</th>
+            <td><input type='text' name='phone' value='' /></td>
+        </tr>
+        <tr class='field-select field-name-citizenship_country_id'>
+            <th>Гражданство</th>
+            <td><select type='text' name='citizenship_country_id' />
+                <option value='0'></option>
+                <option value='1' selectlist_text='Россия'>Россия</option>
+                <option value='2' selectlist_text='Украина'>Украина</option>
+                <option value='3' selectlist_text='Беларусь'>Беларусь</option>
+                <option value='4' selectlist_text='Казахстан'>Казахстан</option>
+                <option value='5' selectlist_text='Азербайджан'>Азербайджан</option>
+                <option value='6' selectlist_text='Армения'>Армения</option>
+                <option value='7' selectlist_text='Грузия'>Грузия</option>
+                <option value='8' selectlist_text='Израиль'>Израиль</option>
+                <option value='9' selectlist_text='США'>США</option>
+                <option value='10' selectlist_text='Канада'>Канада</option>
+                <option value='11' selectlist_text='Кыргызстан'>Кыргызстан</option>
+                <option value='12' selectlist_text='Латвия'>Латвия</option>
+                <option value='13' selectlist_text='Литва'>Литва</option>
+                <option value='14' selectlist_text='Эстония'>Эстония</option>
+                <option value='15' selectlist_text='Молдова'>Молдова</option>
+                <option value='16' selectlist_text='Таджикистан'>Таджикистан</option>
+                <option value='17' selectlist_text='Туркменистан'>Туркменистан</option>
+                <option value='18' selectlist_text='Узбекистан'>Узбекистан</option>
+                <option value='19' selectlist_text='Австралия'>Австралия</option>
+                <option value='20' selectlist_text='Австрия'>Австрия</option>
+                <option value='21' selectlist_text='Албания'>Албания</option>
+                <option value='22' selectlist_text='Алжир'>Алжир</option>
+                <option value='23' selectlist_text='Американское Самоа'>Американское Самоа</option>
+                <option value='24' selectlist_text='Ангилья'>Ангилья</option>
+                <option value='25' selectlist_text='Ангола'>Ангола</option>
+                <option value='26' selectlist_text='Андорра'>Андорра</option>
+                <option value='27' selectlist_text='Антигуа и Барбуда'>Антигуа и Барбуда</option>
+                <option value='28' selectlist_text='Аргентина'>Аргентина</option>
+                <option value='29' selectlist_text='Аруба'>Аруба</option>
+                <option value='30' selectlist_text='Афганистан'>Афганистан</option>
+                <option value='31' selectlist_text='Багамы'>Багамы</option>
+                <option value='32' selectlist_text='Бангладеш'>Бангладеш</option>
+                <option value='33' selectlist_text='Барбадос'>Барбадос</option>
+                <option value='34' selectlist_text='Бахрейн'>Бахрейн</option>
+                <option value='35' selectlist_text='Белиз'>Белиз</option>
+                <option value='36' selectlist_text='Бельгия'>Бельгия</option>
+                <option value='37' selectlist_text='Бенин'>Бенин</option>
+                <option value='38' selectlist_text='Бермуды'>Бермуды</option>
+                <option value='39' selectlist_text='Болгария'>Болгария</option>
+                <option value='40' selectlist_text='Боливия'>Боливия</option>
+                <option value='41' selectlist_text='Босния и Герцеговина'>Босния и Герцеговина</option>
+                <option value='42' selectlist_text='Ботсвана'>Ботсвана</option>
+                <option value='43' selectlist_text='Бразилия'>Бразилия</option>
+                <option value='44' selectlist_text='Бруней-Даруссалам'>Бруней-Даруссалам</option>
+                <option value='45' selectlist_text='Буркина-Фасо'>Буркина-Фасо</option>
+                <option value='46' selectlist_text='Бурунди'>Бурунди</option>
+                <option value='47' selectlist_text='Бутан'>Бутан</option>
+                <option value='48' selectlist_text='Вануату'>Вануату</option>
+                <option value='49' selectlist_text='Великобритания'>Великобритания</option>
+                <option value='50' selectlist_text='Венгрия'>Венгрия</option>
+                <option value='51' selectlist_text='Венесуэла'>Венесуэла</option>
+                <option value='52' selectlist_text='Виргинские острова, Британские'>Виргинские острова, Британские</option>
+                <option value='53' selectlist_text='Виргинские острова, США'>Виргинские острова, США</option>
+                <option value='54' selectlist_text='Восточный Тимор'>Восточный Тимор</option>
+                <option value='55' selectlist_text='Вьетнам'>Вьетнам</option>
+                <option value='56' selectlist_text='Габон'>Габон</option>
+                <option value='57' selectlist_text='Гаити'>Гаити</option>
+                <option value='58' selectlist_text='Гайана'>Гайана</option>
+                <option value='59' selectlist_text='Гамбия'>Гамбия</option>
+                <option value='60' selectlist_text='Гана'>Гана</option>
+                <option value='61' selectlist_text='Гваделупа'>Гваделупа</option>
+                <option value='62' selectlist_text='Гватемала'>Гватемала</option>
+                <option value='63' selectlist_text='Гвинея'>Гвинея</option>
+                <option value='64' selectlist_text='Гвинея-Бисау'>Гвинея-Бисау</option>
+                <option value='65' selectlist_text='Германия'>Германия</option>
+                <option value='66' selectlist_text='Гибралтар'>Гибралтар</option>
+                <option value='67' selectlist_text='Гондурас'>Гондурас</option>
+                <option value='68' selectlist_text='Гонконг'>Гонконг</option>
+                <option value='69' selectlist_text='Гренада'>Гренада</option>
+                <option value='70' selectlist_text='Гренландия'>Гренландия</option>
+                <option value='71' selectlist_text='Греция'>Греция</option>
+                <option value='72' selectlist_text='Гуам'>Гуам</option>
+                <option value='73' selectlist_text='Дания'>Дания</option>
+                <option value='74' selectlist_text='Доминика'>Доминика</option>
+                <option value='75' selectlist_text='Доминиканская Республика'>Доминиканская Республика</option>
+                <option value='76' selectlist_text='Египет'>Египет</option>
+                <option value='77' selectlist_text='Замбия'>Замбия</option>
+                <option value='78' selectlist_text='Западная Сахара'>Западная Сахара</option>
+                <option value='79' selectlist_text='Зимбабве'>Зимбабве</option>
+                <option value='80' selectlist_text='Индия'>Индия</option>
+                <option value='81' selectlist_text='Индонезия'>Индонезия</option>
+                <option value='82' selectlist_text='Иордания'>Иордания</option>
+                <option value='83' selectlist_text='Ирак'>Ирак</option>
+                <option value='84' selectlist_text='Иран'>Иран</option>
+                <option value='85' selectlist_text='Ирландия'>Ирландия</option>
+                <option value='86' selectlist_text='Исландия'>Исландия</option>
+                <option value='87' selectlist_text='Испания'>Испания</option>
+                <option value='88' selectlist_text='Италия'>Италия</option>
+                <option value='89' selectlist_text='Йемен'>Йемен</option>
+                <option value='90' selectlist_text='Кабо-Верде'>Кабо-Верде</option>
+                <option value='91' selectlist_text='Камбоджа'>Камбоджа</option>
+                <option value='92' selectlist_text='Камерун'>Камерун</option>
+                <option value='93' selectlist_text='Катар'>Катар</option>
+                <option value='94' selectlist_text='Кения'>Кения</option>
+                <option value='95' selectlist_text='Кипр'>Кипр</option>
+                <option value='96' selectlist_text='Кирибати'>Кирибати</option>
+                <option value='97' selectlist_text='Китай'>Китай</option>
+                <option value='98' selectlist_text='Колумбия'>Колумбия</option>
+                <option value='99' selectlist_text='Коморы'>Коморы</option>
+                <option value='100' selectlist_text='Конго'>Конго</option>
+                <option value='101' selectlist_text='Конго, демократическая республика'>Конго, демократическая
+                    республика</option>
+                <option value='102' selectlist_text='Коста-Рика'>Коста-Рика</option>
+                <option value='103' selectlist_text='Кот д`Ивуар'>Кот д`Ивуар</option>
+                <option value='104' selectlist_text='Куба'>Куба</option>
+                <option value='105' selectlist_text='Кувейт'>Кувейт</option>
+                <option value='106' selectlist_text='Лаос'>Лаос</option>
+                <option value='107' selectlist_text='Лесото'>Лесото</option>
+                <option value='108' selectlist_text='Либерия'>Либерия</option>
+                <option value='109' selectlist_text='Ливан'>Ливан</option>
+                <option value='110' selectlist_text='Ливия'>Ливия</option>
+                <option value='111' selectlist_text='Лихтенштейн'>Лихтенштейн</option>
+                <option value='112' selectlist_text='Люксембург'>Люксембург</option>
+                <option value='113' selectlist_text='Маврикий'>Маврикий</option>
+                <option value='114' selectlist_text='Мавритания'>Мавритания</option>
+                <option value='115' selectlist_text='Мадагаскар'>Мадагаскар</option>
+                <option value='116' selectlist_text='Макао'>Макао</option>
+                <option value='117' selectlist_text='Македония'>Македония</option>
+                <option value='118' selectlist_text='Малави'>Малави</option>
+                <option value='119' selectlist_text='Малайзия'>Малайзия</option>
+                <option value='120' selectlist_text='Мали'>Мали</option>
+                <option value='121' selectlist_text='Мальдивы'>Мальдивы</option>
+                <option value='122' selectlist_text='Мальта'>Мальта</option>
+                <option value='123' selectlist_text='Марокко'>Марокко</option>
+                <option value='124' selectlist_text='Мартиника'>Мартиника</option>
+                <option value='125' selectlist_text='Маршалловы Острова'>Маршалловы Острова</option>
+                <option value='126' selectlist_text='Мексика'>Мексика</option>
+                <option value='127' selectlist_text='Микронезия, федеративные штаты'>Микронезия, федеративные штаты</option>
+                <option value='128' selectlist_text='Мозамбик'>Мозамбик</option>
+                <option value='129' selectlist_text='Монако'>Монако</option>
+                <option value='130' selectlist_text='Монголия'>Монголия</option>
+                <option value='131' selectlist_text='Монтсеррат'>Монтсеррат</option>
+                <option value='132' selectlist_text='Мьянма'>Мьянма</option>
+                <option value='133' selectlist_text='Намибия'>Намибия</option>
+                <option value='134' selectlist_text='Науру'>Науру</option>
+                <option value='135' selectlist_text='Непал'>Непал</option>
+                <option value='136' selectlist_text='Нигер'>Нигер</option>
+                <option value='137' selectlist_text='Нигерия'>Нигерия</option>
+                <option value='138' selectlist_text='Кюрасао'>Кюрасао</option>
+                <option value='139' selectlist_text='Нидерланды'>Нидерланды</option>
+                <option value='140' selectlist_text='Никарагуа'>Никарагуа</option>
+                <option value='141' selectlist_text='Ниуэ'>Ниуэ</option>
+                <option value='142' selectlist_text='Новая Зеландия'>Новая Зеландия</option>
+                <option value='143' selectlist_text='Новая Каледония'>Новая Каледония</option>
+                <option value='144' selectlist_text='Норвегия'>Норвегия</option>
+                <option value='145' selectlist_text='Объединенные Арабские Эмираты'>Объединенные Арабские Эмираты</option>
+                <option value='146' selectlist_text='Оман'>Оман</option>
+                <option value='147' selectlist_text='Остров Мэн'>Остров Мэн</option>
+                <option value='148' selectlist_text='Остров Норфолк'>Остров Норфолк</option>
+                <option value='149' selectlist_text='Острова Кайман'>Острова Кайман</option>
+                <option value='150' selectlist_text='Острова Кука'>Острова Кука</option>
+                <option value='151' selectlist_text='Острова Теркс и Кайкос'>Острова Теркс и Кайкос</option>
+                <option value='152' selectlist_text='Пакистан'>Пакистан</option>
+                <option value='153' selectlist_text='Палау'>Палау</option>
+                <option value='154' selectlist_text='Палестинская автономия'>Палестинская автономия</option>
+                <option value='155' selectlist_text='Панама'>Панама</option>
+                <option value='156' selectlist_text='Папуа - Новая Гвинея'>Папуа - Новая Гвинея</option>
+                <option value='157' selectlist_text='Парагвай'>Парагвай</option>
+                <option value='158' selectlist_text='Перу'>Перу</option>
+                <option value='159' selectlist_text='Питкерн'>Питкерн</option>
+                <option value='160' selectlist_text='Польша'>Польша</option>
+                <option value='161' selectlist_text='Португалия'>Португалия</option>
+                <option value='162' selectlist_text='Пуэрто-Рико'>Пуэрто-Рико</option>
+                <option value='163' selectlist_text='Реюньон'>Реюньон</option>
+                <option value='164' selectlist_text='Руанда'>Руанда</option>
+                <option value='165' selectlist_text='Румыния'>Румыния</option>
+                <option value='166' selectlist_text='Сальвадор'>Сальвадор</option>
+                <option value='167' selectlist_text='Самоа'>Самоа</option>
+                <option value='168' selectlist_text='Сан-Марино'>Сан-Марино</option>
+                <option value='169' selectlist_text='Сан-Томе и Принсипи'>Сан-Томе и Принсипи</option>
+                <option value='170' selectlist_text='Саудовская Аравия'>Саудовская Аравия</option>
+                <option value='171' selectlist_text='Свазиленд'>Свазиленд</option>
+                <option value='172' selectlist_text='Святая Елена'>Святая Елена</option>
+                <option value='173' selectlist_text='Северная Корея'>Северная Корея</option>
+                <option value='174' selectlist_text='Северные Марианские острова'>Северные Марианские острова</option>
+                <option value='175' selectlist_text='Сейшелы'>Сейшелы</option>
+                <option value='176' selectlist_text='Сенегал'>Сенегал</option>
+                <option value='177' selectlist_text='Сент-Винсент'>Сент-Винсент</option>
+                <option value='178' selectlist_text='Сент-Китс и Невис'>Сент-Китс и Невис</option>
+                <option value='179' selectlist_text='Сент-Люсия'>Сент-Люсия</option>
+                <option value='180' selectlist_text='Сент-Пьер и Микелон'>Сент-Пьер и Микелон</option>
+                <option value='181' selectlist_text='Сербия'>Сербия</option>
+                <option value='182' selectlist_text='Сингапур'>Сингапур</option>
+                <option value='183' selectlist_text='Сирийская Арабская Республика'>Сирийская Арабская Республика</option>
+                <option value='184' selectlist_text='Словакия'>Словакия</option>
+                <option value='185' selectlist_text='Словения'>Словения</option>
+                <option value='186' selectlist_text='Соломоновы Острова'>Соломоновы Острова</option>
+                <option value='187' selectlist_text='Сомали'>Сомали</option>
+                <option value='188' selectlist_text='Судан'>Судан</option>
+                <option value='189' selectlist_text='Суринам'>Суринам</option>
+                <option value='190' selectlist_text='Сьерра-Леоне'>Сьерра-Леоне</option>
+                <option value='191' selectlist_text='Таиланд'>Таиланд</option>
+                <option value='192' selectlist_text='Тайвань'>Тайвань</option>
+                <option value='193' selectlist_text='Танзания'>Танзания</option>
+                <option value='194' selectlist_text='Того'>Того</option>
+                <option value='195' selectlist_text='Токелау'>Токелау</option>
+                <option value='196' selectlist_text='Тонга'>Тонга</option>
+                <option value='197' selectlist_text='Тринидад и Тобаго'>Тринидад и Тобаго</option>
+                <option value='198' selectlist_text='Тувалу'>Тувалу</option>
+                <option value='199' selectlist_text='Тунис'>Тунис</option>
+                <option value='200' selectlist_text='Турция'>Турция</option>
+                <option value='201' selectlist_text='Уганда'>Уганда</option>
+                <option value='202' selectlist_text='Уоллис и Футуна'>Уоллис и Футуна</option>
+                <option value='203' selectlist_text='Уругвай'>Уругвай</option>
+                <option value='204' selectlist_text='Фарерские острова'>Фарерские острова</option>
+                <option value='205' selectlist_text='Фиджи'>Фиджи</option>
+                <option value='206' selectlist_text='Филиппины'>Филиппины</option>
+                <option value='207' selectlist_text='Финляндия'>Финляндия</option>
+                <option value='208' selectlist_text='Фолклендские острова'>Фолклендские острова</option>
+                <option value='209' selectlist_text='Франция'>Франция</option>
+                <option value='210' selectlist_text='Французская Гвиана'>Французская Гвиана</option>
+                <option value='211' selectlist_text='Французская Полинезия'>Французская Полинезия</option>
+                <option value='212' selectlist_text='Хорватия'>Хорватия</option>
+                <option value='213' selectlist_text='Центрально-Африканская Республика'>Центрально-Африканская
+                    Республика</option>
+                <option value='214' selectlist_text='Чад'>Чад</option>
+                <option value='215' selectlist_text='Чехия'>Чехия</option>
+                <option value='216' selectlist_text='Чили'>Чили</option>
+                <option value='217' selectlist_text='Швейцария'>Швейцария</option>
+                <option value='218' selectlist_text='Швеция'>Швеция</option>
+                <option value='219' selectlist_text='Шпицберген и Ян Майен'>Шпицберген и Ян Майен</option>
+                <option value='220' selectlist_text='Шри-Ланка'>Шри-Ланка</option>
+                <option value='221' selectlist_text='Эквадор'>Эквадор</option>
+                <option value='222' selectlist_text='Экваториальная Гвинея'>Экваториальная Гвинея</option>
+                <option value='223' selectlist_text='Эритрея'>Эритрея</option>
+                <option value='224' selectlist_text='Эфиопия'>Эфиопия</option>
+                <option value='226' selectlist_text='Южная Корея'>Южная Корея</option>
+                <option value='227' selectlist_text='Южно-Африканская Республика'>Южно-Африканская Республика</option>
+                <option value='228' selectlist_text='Ямайка'>Ямайка</option>
+                <option value='229' selectlist_text='Япония'>Япония</option>
+                <option value='230' selectlist_text='Черногория'>Черногория</option>
+                <option value='231' selectlist_text='Джибути'>Джибути</option>
+                <option value='232' selectlist_text='Южный Судан'>Южный Судан</option>
+                <option value='233' selectlist_text='Ватикан'>Ватикан</option>
+                <option value='234' selectlist_text='Синт-Мартен'>Синт-Мартен</option>
+                <option value='235' selectlist_text='Бонайре, Синт-Эстатиус и Саба'>Бонайре, Синт-Эстатиус и Саба</option>
+                </select>
+            </td>
+        </tr>
+        <tr class='field-select field-name-country_id'>
+            <th>Страна</th>
+            <td><select type='text' name='country_id' />
+                <option value='0'></option>
+                <option value='1' selectlist_text='Россия'>Россия</option>
+                <option value='2' selectlist_text='Украина'>Украина</option>
+                <option value='3' selectlist_text='Беларусь'>Беларусь</option>
+                <option value='4' selectlist_text='Казахстан'>Казахстан</option>
+                <option value='5' selectlist_text='Азербайджан'>Азербайджан</option>
+                <option value='6' selectlist_text='Армения'>Армения</option>
+                <option value='7' selectlist_text='Грузия'>Грузия</option>
+                <option value='8' selectlist_text='Израиль'>Израиль</option>
+                <option value='9' selectlist_text='США'>США</option>
+                <option value='10' selectlist_text='Канада'>Канада</option>
+                <option value='11' selectlist_text='Кыргызстан'>Кыргызстан</option>
+                <option value='12' selectlist_text='Латвия'>Латвия</option>
+                <option value='13' selectlist_text='Литва'>Литва</option>
+                <option value='14' selectlist_text='Эстония'>Эстония</option>
+                <option value='15' selectlist_text='Молдова'>Молдова</option>
+                <option value='16' selectlist_text='Таджикистан'>Таджикистан</option>
+                <option value='17' selectlist_text='Туркменистан'>Туркменистан</option>
+                <option value='18' selectlist_text='Узбекистан'>Узбекистан</option>
+                <option value='19' selectlist_text='Австралия'>Австралия</option>
+                <option value='20' selectlist_text='Австрия'>Австрия</option>
+                <option value='21' selectlist_text='Албания'>Албания</option>
+                <option value='22' selectlist_text='Алжир'>Алжир</option>
+                <option value='23' selectlist_text='Американское Самоа'>Американское Самоа</option>
+                <option value='24' selectlist_text='Ангилья'>Ангилья</option>
+                <option value='25' selectlist_text='Ангола'>Ангола</option>
+                <option value='26' selectlist_text='Андорра'>Андорра</option>
+                <option value='27' selectlist_text='Антигуа и Барбуда'>Антигуа и Барбуда</option>
+                <option value='28' selectlist_text='Аргентина'>Аргентина</option>
+                <option value='29' selectlist_text='Аруба'>Аруба</option>
+                <option value='30' selectlist_text='Афганистан'>Афганистан</option>
+                <option value='31' selectlist_text='Багамы'>Багамы</option>
+                <option value='32' selectlist_text='Бангладеш'>Бангладеш</option>
+                <option value='33' selectlist_text='Барбадос'>Барбадос</option>
+                <option value='34' selectlist_text='Бахрейн'>Бахрейн</option>
+                <option value='35' selectlist_text='Белиз'>Белиз</option>
+                <option value='36' selectlist_text='Бельгия'>Бельгия</option>
+                <option value='37' selectlist_text='Бенин'>Бенин</option>
+                <option value='38' selectlist_text='Бермуды'>Бермуды</option>
+                <option value='39' selectlist_text='Болгария'>Болгария</option>
+                <option value='40' selectlist_text='Боливия'>Боливия</option>
+                <option value='41' selectlist_text='Босния и Герцеговина'>Босния и Герцеговина</option>
+                <option value='42' selectlist_text='Ботсвана'>Ботсвана</option>
+                <option value='43' selectlist_text='Бразилия'>Бразилия</option>
+                <option value='44' selectlist_text='Бруней-Даруссалам'>Бруней-Даруссалам</option>
+                <option value='45' selectlist_text='Буркина-Фасо'>Буркина-Фасо</option>
+                <option value='46' selectlist_text='Бурунди'>Бурунди</option>
+                <option value='47' selectlist_text='Бутан'>Бутан</option>
+                <option value='48' selectlist_text='Вануату'>Вануату</option>
+                <option value='49' selectlist_text='Великобритания'>Великобритания</option>
+                <option value='50' selectlist_text='Венгрия'>Венгрия</option>
+                <option value='51' selectlist_text='Венесуэла'>Венесуэла</option>
+                <option value='52' selectlist_text='Виргинские острова, Британские'>Виргинские острова, Британские</option>
+                <option value='53' selectlist_text='Виргинские острова, США'>Виргинские острова, США</option>
+                <option value='54' selectlist_text='Восточный Тимор'>Восточный Тимор</option>
+                <option value='55' selectlist_text='Вьетнам'>Вьетнам</option>
+                <option value='56' selectlist_text='Габон'>Габон</option>
+                <option value='57' selectlist_text='Гаити'>Гаити</option>
+                <option value='58' selectlist_text='Гайана'>Гайана</option>
+                <option value='59' selectlist_text='Гамбия'>Гамбия</option>
+                <option value='60' selectlist_text='Гана'>Гана</option>
+                <option value='61' selectlist_text='Гваделупа'>Гваделупа</option>
+                <option value='62' selectlist_text='Гватемала'>Гватемала</option>
+                <option value='63' selectlist_text='Гвинея'>Гвинея</option>
+                <option value='64' selectlist_text='Гвинея-Бисау'>Гвинея-Бисау</option>
+                <option value='65' selectlist_text='Германия'>Германия</option>
+                <option value='66' selectlist_text='Гибралтар'>Гибралтар</option>
+                <option value='67' selectlist_text='Гондурас'>Гондурас</option>
+                <option value='68' selectlist_text='Гонконг'>Гонконг</option>
+                <option value='69' selectlist_text='Гренада'>Гренада</option>
+                <option value='70' selectlist_text='Гренландия'>Гренландия</option>
+                <option value='71' selectlist_text='Греция'>Греция</option>
+                <option value='72' selectlist_text='Гуам'>Гуам</option>
+                <option value='73' selectlist_text='Дания'>Дания</option>
+                <option value='74' selectlist_text='Доминика'>Доминика</option>
+                <option value='75' selectlist_text='Доминиканская Республика'>Доминиканская Республика</option>
+                <option value='76' selectlist_text='Египет'>Египет</option>
+                <option value='77' selectlist_text='Замбия'>Замбия</option>
+                <option value='78' selectlist_text='Западная Сахара'>Западная Сахара</option>
+                <option value='79' selectlist_text='Зимбабве'>Зимбабве</option>
+                <option value='80' selectlist_text='Индия'>Индия</option>
+                <option value='81' selectlist_text='Индонезия'>Индонезия</option>
+                <option value='82' selectlist_text='Иордания'>Иордания</option>
+                <option value='83' selectlist_text='Ирак'>Ирак</option>
+                <option value='84' selectlist_text='Иран'>Иран</option>
+                <option value='85' selectlist_text='Ирландия'>Ирландия</option>
+                <option value='86' selectlist_text='Исландия'>Исландия</option>
+                <option value='87' selectlist_text='Испания'>Испания</option>
+                <option value='88' selectlist_text='Италия'>Италия</option>
+                <option value='89' selectlist_text='Йемен'>Йемен</option>
+                <option value='90' selectlist_text='Кабо-Верде'>Кабо-Верде</option>
+                <option value='91' selectlist_text='Камбоджа'>Камбоджа</option>
+                <option value='92' selectlist_text='Камерун'>Камерун</option>
+                <option value='93' selectlist_text='Катар'>Катар</option>
+                <option value='94' selectlist_text='Кения'>Кения</option>
+                <option value='95' selectlist_text='Кипр'>Кипр</option>
+                <option value='96' selectlist_text='Кирибати'>Кирибати</option>
+                <option value='97' selectlist_text='Китай'>Китай</option>
+                <option value='98' selectlist_text='Колумбия'>Колумбия</option>
+                <option value='99' selectlist_text='Коморы'>Коморы</option>
+                <option value='100' selectlist_text='Конго'>Конго</option>
+                <option value='101' selectlist_text='Конго, демократическая республика'>Конго, демократическая
+                    республика</option>
+                <option value='102' selectlist_text='Коста-Рика'>Коста-Рика</option>
+                <option value='103' selectlist_text='Кот д`Ивуар'>Кот д`Ивуар</option>
+                <option value='104' selectlist_text='Куба'>Куба</option>
+                <option value='105' selectlist_text='Кувейт'>Кувейт</option>
+                <option value='106' selectlist_text='Лаос'>Лаос</option>
+                <option value='107' selectlist_text='Лесото'>Лесото</option>
+                <option value='108' selectlist_text='Либерия'>Либерия</option>
+                <option value='109' selectlist_text='Ливан'>Ливан</option>
+                <option value='110' selectlist_text='Ливия'>Ливия</option>
+                <option value='111' selectlist_text='Лихтенштейн'>Лихтенштейн</option>
+                <option value='112' selectlist_text='Люксембург'>Люксембург</option>
+                <option value='113' selectlist_text='Маврикий'>Маврикий</option>
+                <option value='114' selectlist_text='Мавритания'>Мавритания</option>
+                <option value='115' selectlist_text='Мадагаскар'>Мадагаскар</option>
+                <option value='116' selectlist_text='Макао'>Макао</option>
+                <option value='117' selectlist_text='Македония'>Македония</option>
+                <option value='118' selectlist_text='Малави'>Малави</option>
+                <option value='119' selectlist_text='Малайзия'>Малайзия</option>
+                <option value='120' selectlist_text='Мали'>Мали</option>
+                <option value='121' selectlist_text='Мальдивы'>Мальдивы</option>
+                <option value='122' selectlist_text='Мальта'>Мальта</option>
+                <option value='123' selectlist_text='Марокко'>Марокко</option>
+                <option value='124' selectlist_text='Мартиника'>Мартиника</option>
+                <option value='125' selectlist_text='Маршалловы Острова'>Маршалловы Острова</option>
+                <option value='126' selectlist_text='Мексика'>Мексика</option>
+                <option value='127' selectlist_text='Микронезия, федеративные штаты'>Микронезия, федеративные штаты</option>
+                <option value='128' selectlist_text='Мозамбик'>Мозамбик</option>
+                <option value='129' selectlist_text='Монако'>Монако</option>
+                <option value='130' selectlist_text='Монголия'>Монголия</option>
+                <option value='131' selectlist_text='Монтсеррат'>Монтсеррат</option>
+                <option value='132' selectlist_text='Мьянма'>Мьянма</option>
+                <option value='133' selectlist_text='Намибия'>Намибия</option>
+                <option value='134' selectlist_text='Науру'>Науру</option>
+                <option value='135' selectlist_text='Непал'>Непал</option>
+                <option value='136' selectlist_text='Нигер'>Нигер</option>
+                <option value='137' selectlist_text='Нигерия'>Нигерия</option>
+                <option value='138' selectlist_text='Кюрасао'>Кюрасао</option>
+                <option value='139' selectlist_text='Нидерланды'>Нидерланды</option>
+                <option value='140' selectlist_text='Никарагуа'>Никарагуа</option>
+                <option value='141' selectlist_text='Ниуэ'>Ниуэ</option>
+                <option value='142' selectlist_text='Новая Зеландия'>Новая Зеландия</option>
+                <option value='143' selectlist_text='Новая Каледония'>Новая Каледония</option>
+                <option value='144' selectlist_text='Норвегия'>Норвегия</option>
+                <option value='145' selectlist_text='Объединенные Арабские Эмираты'>Объединенные Арабские Эмираты</option>
+                <option value='146' selectlist_text='Оман'>Оман</option>
+                <option value='147' selectlist_text='Остров Мэн'>Остров Мэн</option>
+                <option value='148' selectlist_text='Остров Норфолк'>Остров Норфолк</option>
+                <option value='149' selectlist_text='Острова Кайман'>Острова Кайман</option>
+                <option value='150' selectlist_text='Острова Кука'>Острова Кука</option>
+                <option value='151' selectlist_text='Острова Теркс и Кайкос'>Острова Теркс и Кайкос</option>
+                <option value='152' selectlist_text='Пакистан'>Пакистан</option>
+                <option value='153' selectlist_text='Палау'>Палау</option>
+                <option value='154' selectlist_text='Палестинская автономия'>Палестинская автономия</option>
+                <option value='155' selectlist_text='Панама'>Панама</option>
+                <option value='156' selectlist_text='Папуа - Новая Гвинея'>Папуа - Новая Гвинея</option>
+                <option value='157' selectlist_text='Парагвай'>Парагвай</option>
+                <option value='158' selectlist_text='Перу'>Перу</option>
+                <option value='159' selectlist_text='Питкерн'>Питкерн</option>
+                <option value='160' selectlist_text='Польша'>Польша</option>
+                <option value='161' selectlist_text='Португалия'>Португалия</option>
+                <option value='162' selectlist_text='Пуэрто-Рико'>Пуэрто-Рико</option>
+                <option value='163' selectlist_text='Реюньон'>Реюньон</option>
+                <option value='164' selectlist_text='Руанда'>Руанда</option>
+                <option value='165' selectlist_text='Румыния'>Румыния</option>
+                <option value='166' selectlist_text='Сальвадор'>Сальвадор</option>
+                <option value='167' selectlist_text='Самоа'>Самоа</option>
+                <option value='168' selectlist_text='Сан-Марино'>Сан-Марино</option>
+                <option value='169' selectlist_text='Сан-Томе и Принсипи'>Сан-Томе и Принсипи</option>
+                <option value='170' selectlist_text='Саудовская Аравия'>Саудовская Аравия</option>
+                <option value='171' selectlist_text='Свазиленд'>Свазиленд</option>
+                <option value='172' selectlist_text='Святая Елена'>Святая Елена</option>
+                <option value='173' selectlist_text='Северная Корея'>Северная Корея</option>
+                <option value='174' selectlist_text='Северные Марианские острова'>Северные Марианские острова</option>
+                <option value='175' selectlist_text='Сейшелы'>Сейшелы</option>
+                <option value='176' selectlist_text='Сенегал'>Сенегал</option>
+                <option value='177' selectlist_text='Сент-Винсент'>Сент-Винсент</option>
+                <option value='178' selectlist_text='Сент-Китс и Невис'>Сент-Китс и Невис</option>
+                <option value='179' selectlist_text='Сент-Люсия'>Сент-Люсия</option>
+                <option value='180' selectlist_text='Сент-Пьер и Микелон'>Сент-Пьер и Микелон</option>
+                <option value='181' selectlist_text='Сербия'>Сербия</option>
+                <option value='182' selectlist_text='Сингапур'>Сингапур</option>
+                <option value='183' selectlist_text='Сирийская Арабская Республика'>Сирийская Арабская Республика</option>
+                <option value='184' selectlist_text='Словакия'>Словакия</option>
+                <option value='185' selectlist_text='Словения'>Словения</option>
+                <option value='186' selectlist_text='Соломоновы Острова'>Соломоновы Острова</option>
+                <option value='187' selectlist_text='Сомали'>Сомали</option>
+                <option value='188' selectlist_text='Судан'>Судан</option>
+                <option value='189' selectlist_text='Суринам'>Суринам</option>
+                <option value='190' selectlist_text='Сьерра-Леоне'>Сьерра-Леоне</option>
+                <option value='191' selectlist_text='Таиланд'>Таиланд</option>
+                <option value='192' selectlist_text='Тайвань'>Тайвань</option>
+                <option value='193' selectlist_text='Танзания'>Танзания</option>
+                <option value='194' selectlist_text='Того'>Того</option>
+                <option value='195' selectlist_text='Токелау'>Токелау</option>
+                <option value='196' selectlist_text='Тонга'>Тонга</option>
+                <option value='197' selectlist_text='Тринидад и Тобаго'>Тринидад и Тобаго</option>
+                <option value='198' selectlist_text='Тувалу'>Тувалу</option>
+                <option value='199' selectlist_text='Тунис'>Тунис</option>
+                <option value='200' selectlist_text='Турция'>Турция</option>
+                <option value='201' selectlist_text='Уганда'>Уганда</option>
+                <option value='202' selectlist_text='Уоллис и Футуна'>Уоллис и Футуна</option>
+                <option value='203' selectlist_text='Уругвай'>Уругвай</option>
+                <option value='204' selectlist_text='Фарерские острова'>Фарерские острова</option>
+                <option value='205' selectlist_text='Фиджи'>Фиджи</option>
+                <option value='206' selectlist_text='Филиппины'>Филиппины</option>
+                <option value='207' selectlist_text='Финляндия'>Финляндия</option>
+                <option value='208' selectlist_text='Фолклендские острова'>Фолклендские острова</option>
+                <option value='209' selectlist_text='Франция'>Франция</option>
+                <option value='210' selectlist_text='Французская Гвиана'>Французская Гвиана</option>
+                <option value='211' selectlist_text='Французская Полинезия'>Французская Полинезия</option>
+                <option value='212' selectlist_text='Хорватия'>Хорватия</option>
+                <option value='213' selectlist_text='Центрально-Африканская Республика'>Центрально-Африканская
+                    Республика</option>
+                <option value='214' selectlist_text='Чад'>Чад</option>
+                <option value='215' selectlist_text='Чехия'>Чехия</option>
+                <option value='216' selectlist_text='Чили'>Чили</option>
+                <option value='217' selectlist_text='Швейцария'>Швейцария</option>
+                <option value='218' selectlist_text='Швеция'>Швеция</option>
+                <option value='219' selectlist_text='Шпицберген и Ян Майен'>Шпицберген и Ян Майен</option>
+                <option value='220' selectlist_text='Шри-Ланка'>Шри-Ланка</option>
+                <option value='221' selectlist_text='Эквадор'>Эквадор</option>
+                <option value='222' selectlist_text='Экваториальная Гвинея'>Экваториальная Гвинея</option>
+                <option value='223' selectlist_text='Эритрея'>Эритрея</option>
+                <option value='224' selectlist_text='Эфиопия'>Эфиопия</option>
+                <option value='226' selectlist_text='Южная Корея'>Южная Корея</option>
+                <option value='227' selectlist_text='Южно-Африканская Республика'>Южно-Африканская Республика</option>
+                <option value='228' selectlist_text='Ямайка'>Ямайка</option>
+                <option value='229' selectlist_text='Япония'>Япония</option>
+                <option value='230' selectlist_text='Черногория'>Черногория</option>
+                <option value='231' selectlist_text='Джибути'>Джибути</option>
+                <option value='232' selectlist_text='Южный Судан'>Южный Судан</option>
+                <option value='233' selectlist_text='Ватикан'>Ватикан</option>
+                <option value='234' selectlist_text='Синт-Мартен'>Синт-Мартен</option>
+                <option value='235' selectlist_text='Бонайре, Синт-Эстатиус и Саба'>Бонайре, Синт-Эстатиус и Саба</option>
+                </select>
+            </td>
+        </tr>
+        <tr class='field-text field-name-city'>
+            <th>Город</th>
+            <td><input type='text' name='city' value='' /></td>
+        </tr>
+        <tr class='field-text field-name-addres'>
+            <th>Адрес</th>
+            <td><input type='text' name='addres' value='' /></td>
+        </tr>
+        <tr class='field-htpasswd field-name-password'>
+            <th>Пароль</th>
+            <td>
+                <input type='password' name='password[first]' value='' /><br />
+                <input type='password' name='password[second]' value='' /> (Повторить)
+            </td>
+        </tr>
+        <tr class='field-checkbox field-name-enable'>
+            <th>Активирован</th>
+            <td><input type='checkbox' name='enable' value='1' /></td>
+        </tr>
+
+        <tr class='field-files field-name-personal_anketa_file'>
+            <th>Скан. анкеты</th>
+            <td><input type='file' class='add_file' value='Добавить файл' name='personal_anketa_file' /></td>
+        </tr>
+
+        <tr class='field-files field-name-personal_document'>
+            <th>Скан. паспорта</th>
+            <td><input type='file' class='add_file' value='Добавить файл' name='personal_document' /></td>
+        </tr>
+
+        <tr class='field-checkbox field-name-personal_document_true'>
+            <th>Документы проверены</th>
+            <td><input type='checkbox' name='personal_document_true' value='1' /></td>
+        </tr>
+
+        <tr class='field-files field-name-file_open_lc'>
+            <th>Док. открытия лицевого счета</th>
+            <td><input type='file' class='add_file' value='Добавить файл' field='file_open_lc' /></td>
+        </tr>
+
+        <tr class='field-text field-name-fonds'>
+            <th>Фонды</th>
+            <td><input type='text' name='fonds' value='' readonly='readonly' /></td>
+        </tr>
+        <tr class='field-select field-name-manager_id'>
+            <th>Консультант</th>
+            <td><select type='text' name='manager_id' />
+                <option value='0'></option>
+                </select>
+            </td>
+        </tr>
+        <tr class='field-date field-name-registration_date'>
+            <th>Дата регистрации</th>
+            <td><input type='text' name='registration_date' value='' /></td>
+        </tr>
+    </table>
+    <input type='submit'/>
+</form>
