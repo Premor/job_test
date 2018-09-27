@@ -452,8 +452,8 @@ module.exports.update = (table,val,options={})=>{
         case 'countries': ret = Countries.update(val,options); break;
         case 'likvid_book': ret = Likvid_book.update(val,options);break;
         case 'fonds': ret = Fond.update(val,options);break;
-        case 'investors': ret = Investors.findAll(val,options);break;
-        case 'fonds_map': ret = Fonds_map.findAll(options);break;
+        case 'investors': ret = Investors.update(val,options);break;
+        case 'fonds_map': ret = Fonds_map.update(val,options);break;
     }
     return ret;
 }

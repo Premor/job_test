@@ -43,7 +43,12 @@ Test1.sync();
 Test2.sync();
 
 
-Test1.findAll({include:[{model:Test2,attributes:['names']}]}).then((val)=>{for(i of val) {console.log(i.dataValues)}})
+Test2.findAll({
+    attributes:['id',[sequelize.literal('(select names_id from test1)'),'TEST'],'names']
+})
+.then((val)=>{let test1 = 'ab';return Test2.findAll()})
+.then((val)=>{console.log(test1)})
+.catch((err)=>{console.log(err)})
 
 // Test1.create({names_id:0});
 // Test1.create({names_id:1});

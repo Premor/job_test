@@ -25,6 +25,9 @@ exports.install = function () {
 	ROUTE('GET /db/change/{table}/', db_add_view);
 	ROUTE('POST /db/change/{table}/', db_change);
 	ROUTE('GET /db/view/{table}/', db_view);
+
+
+	ROUTE('GET /test/',test);
 };
 
 const DB = require('../modules/db');
@@ -135,6 +138,8 @@ function db_select_view() {
 function db_view(table) {
 	console.log('VIEW', table);
 	let options;
+
+
 	switch (table) {
 		case 'countries':
 			options = {
@@ -210,7 +215,8 @@ function db_view(table) {
 			break;
 		case 'investors':
 			options = {
-				attributes: ['balance', 'first_name', 'middle_name', 'last_name', ]
+				attributes: ['balance',['balance','Инвестировано средств'], 'first_name', 'middle_name', 'last_name', ],
+				group:['id']
 			};
 			break;
 
@@ -229,6 +235,7 @@ function db_view(table) {
 		default:
 			options = {};
 	}
+	specific_view(this,table,options);
 	DB.findAll(table, options)
 		.then(val => {
 			let data = [];
@@ -258,6 +265,10 @@ function db_view(table) {
 					i.dataValues['Цена пая'] = i.pay_price
 					//console.log(val[0])
 					//i.dataValues.pray
+					};break;
+				case 'investors':
+					for (i of val){
+						//i.dataValues['Инвестировано средств'] =
 					}
 			}
 			this.view('db', {
@@ -265,6 +276,7 @@ function db_view(table) {
 				data: val
 			});
 		})
+		.then()
 		.catch(err => {
 			this.view('db', {
 				err: `Unable to connect to the database:${err}`
@@ -344,4 +356,22 @@ function add_money(){
 
 		//this.json({ok:'KAEF'});}
 	else {this.json({err:'Parasha',val:typeof money})};
+}
+
+async function specific_view(self,table,options){
+	// let res;
+	// if (table == 'investors'){
+	// 	let val = await DB.findAll(table,options)
+	// 	let val2 = await DB.findAll('fonds_map',{
+	// 		include: [{
+	// 			model: DB.tables.fond,
+	// 			required: true,
+	// 			attributes: ['name']
+	// 		}]
+	// 	})
+	// 	for (i in val)
+	// }
+}
+function test(){
+	DB.update('investors',)
 }
