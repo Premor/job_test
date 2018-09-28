@@ -25,13 +25,13 @@ exports.install = function () {
 	ROUTE('GET /db/change/{table}/', db_add_view);
 	ROUTE('POST /db/change/{table}/', db_change);
 	ROUTE('GET /db/view/{table}/', db_view);
-
+	ROUTE('GET /test/add_money_fond/',test_add_money);
 
 	ROUTE('GET /test/',test);
 };
 
 const DB = require('../modules/db');
-
+const SQL = require('../modules/sql_scripts');
 
 
 
@@ -236,52 +236,51 @@ function db_view(table) {
 			options = {};
 	}
 	specific_view(this,table,options);
-	DB.findAll(table, options)
-		.then(val => {
-			let data = [];
-			switch (table) {
-				case 'fonds':
-					for (i of val) {
+	// DB.findAll(table, options)
+	// 	.then(val => {
+	// 		let data = [];
+	// 		switch (table) {
+	// 			case 'fonds':
+	// 				for (i of val) {
 
-						i.dataValues['Управляющий'].dataValues.full_name = i.dataValues['Управляющий'].fullName;
-						delete i.dataValues['Управляющий'].dataValues.first_name;
-						delete i.dataValues['Управляющий'].dataValues.middle_name;
-						delete i.dataValues['Управляющий'].dataValues.last_name;
-						// data.push(i.dataValues);
-					};
-					break;
-				case 'fonds_map':
-					for (i of val) {
+	// 					i.dataValues['Управляющий'].dataValues.full_name = i.dataValues['Управляющий'].fullName;
+	// 					delete i.dataValues['Управляющий'].dataValues.first_name;
+	// 					delete i.dataValues['Управляющий'].dataValues.middle_name;
+	// 					delete i.dataValues['Управляющий'].dataValues.last_name;
+	// 					// data.push(i.dataValues);
+	// 				};
+	// 				break;
+	// 			case 'fonds_map':
+	// 				for (i of val) {
 
-						i.dataValues['Инвестор'].dataValues.full_name = i.dataValues['Инвестор'].fullName;
-						delete i.dataValues['Инвестор'].dataValues.first_name;
-						delete i.dataValues['Инвестор'].dataValues.middle_name;
-						delete i.dataValues['Инвестор'].dataValues.last_name;
-						// data.push(i.dataValues);
-					};
-					break;
-				case 'likvid_book':
-					for(i of val){
-					i.dataValues['Цена пая'] = i.pay_price
-					//console.log(val[0])
-					//i.dataValues.pray
-					};break;
-				case 'investors':
-					for (i of val){
-						//i.dataValues['Инвестировано средств'] =
-					}
-			}
-			this.view('db', {
-				ok: 'Connection has been established successfully.',
-				data: val
-			});
-		})
-		.then()
-		.catch(err => {
-			this.view('db', {
-				err: `Unable to connect to the database:${err}`
-			});
-		});
+	// 					i.dataValues['Инвестор'].dataValues.full_name = i.dataValues['Инвестор'].fullName;
+	// 					delete i.dataValues['Инвестор'].dataValues.first_name;
+	// 					delete i.dataValues['Инвестор'].dataValues.middle_name;
+	// 					delete i.dataValues['Инвестор'].dataValues.last_name;
+	// 					// data.push(i.dataValues);
+	// 				};
+	// 				break;
+	// 			case 'likvid_book':
+	// 				for(i of val){
+	// 				i.dataValues['Цена пая'] = i.pay_price
+	// 				//console.log(val[0])
+	// 				//i.dataValues.pray
+	// 				};break;
+	// 			case 'investors':
+	// 				for (i of val){
+	// 					//i.dataValues['Инвестировано средств'] =
+	// 				}
+	// 		}
+	// 		this.view('db', {
+	// 			ok: 'Connection has been established successfully.',
+	// 			data: val
+	// 		});
+	// 	})
+	// 	.catch(err => {
+	// 		this.view('db', {
+	// 			err: `Unable to connect to the database:${err}`
+	// 		});
+	// 	});
 
 }
 
@@ -348,7 +347,7 @@ function add_money_view(){
 function add_money(){
 	let money = parseInt(this.body.money);
 	if (money){
-		DB.findAll('likvid_book',{limit:1,order:[['time','DESC']]})
+		DB.findAll('likvid_book',{where:{fond_id:this.body.id},limit:1,order:[['time','DESC']]})
 		.then((val)=>{let buf=val[0].dataValues; buf.likvidstoim+=money;buf.time = Date.now();delete buf.id;return DB.create('likvid_book',buf) })
 		.then((val)=>{this.json({ok:val})})
 		.catch((err)=>{this.json({err:err})})
@@ -359,19 +358,27 @@ function add_money(){
 }
 
 async function specific_view(self,table,options){
-	// let res;
-	// if (table == 'investors'){
-	// 	let val = await DB.findAll(table,options)
-	// 	let val2 = await DB.findAll('fonds_map',{
-	// 		include: [{
-	// 			model: DB.tables.fond,
-	// 			required: true,
-	// 			attributes: ['name']
-	// 		}]
-	// 	})
-	// 	for (i in val)
-	// }
+	
+	let res;
+	if (table == 'investors'){
+		try{
+		let buf = await DB.seq.query(SQL.get_money,{type:DB.seq.QueryTypes.SELECT})
+		//self.json({data:buf})
+		self.view('db_raw', {
+						ok: 'Connection has been established successfully.',
+						data: buf
+					});
+	}
+		catch(err){
+			self.json({err:err})
+		}
+	}
 }
 function test(){
 	DB.update('investors',)
+}
+
+function test_add_money(){
+	this.query.fond//fond investor money
+
 }

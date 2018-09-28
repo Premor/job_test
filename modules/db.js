@@ -385,6 +385,41 @@ const Fonds_map = sequelize.define('fonds_map',{
     freezeTableName:true,
     timestamps:false
 });
+
+const History = sequelize.define('akciahistory',{
+    investor_id:{
+        type:Sequelize.INTEGER
+    },
+    fond_id:{
+        type:Sequelize.INTEGER
+    },
+    akciacount:{
+        type:Sequelize.DOUBLE
+    },
+    akciacena:{
+        type:Sequelize.DOUBLE
+    },
+    time:{
+        type:Sequelize.DATE
+    },
+    akciacount:{
+        type:Sequelize.DOUBLE
+    },
+    akciacenamiddle:{
+        type:Sequelize.DOUBLE
+    },
+    akciacenamaxmiddle:{
+        type:Sequelize.DOUBLE
+    },
+    voznagrupravl_bool:{
+        type:Sequelize.BOOLEAN,
+        defaultValue:false
+    }
+},{
+    freezeTableName:true,
+    timestamps:false
+});
+
 //Fond.hasMany(Likvid_book,{foreignKey:'fond_id',sourceKey:'name',targetKey:'name'});
 Likvid_book.belongsTo(Fond,{foreignKey:'fond_id'});
 Fond.belongsTo(Investors,{foreignKey:'upravl_id',as:'Управляющий',});
@@ -398,6 +433,7 @@ Likvid_book.sync();
 Fond.sync();
 Investors.sync();
 Fonds_map.sync();
+History.sync();
 
 module.exports.seq = sequelize;
 module.exports.tables = {countries:Countries,
@@ -406,6 +442,7 @@ module.exports.tables = {countries:Countries,
     fond:Fond,
     investors:Investors,
     fonds_map:Fonds_map,
+    history:History,
 };
 
 module.exports.findAll = (table,options={})=>{
@@ -417,6 +454,7 @@ module.exports.findAll = (table,options={})=>{
         case 'fonds': ret = Fond.findAll(options);break;
         case 'investors': ret = Investors.findAll(options);break;
         case 'fonds_map': ret = Fonds_map.findAll(options);break;
+        case 'akciahistory': ret = History.findAll(options);break;
     }
     return ret;
 }
@@ -430,6 +468,7 @@ module.exports.create = (table,val,options={})=>{
         case 'fonds': ret = Fond.create(val,options);break;
         case 'investors': ret = Investors.create(val,options);break;
         case 'fonds_map': ret = Fonds_map.create(val,options);break;
+        case 'akciahistory': ret = History.create(val,options);break;
     }
     return ret;
 }
@@ -442,6 +481,7 @@ module.exports.destroy = (table,options={})=>{
         case 'fonds': ret = Fond.destroy(options);break;
         case 'investors': ret = Investors.destroy(options);break;
         case 'fonds_map': ret = Fonds_map.destroy(options);break;
+        case 'akciahistory': ret = History.destroy(options);break;
     }
     return ret;
 }
@@ -454,6 +494,7 @@ module.exports.update = (table,val,options={})=>{
         case 'fonds': ret = Fond.update(val,options);break;
         case 'investors': ret = Investors.update(val,options);break;
         case 'fonds_map': ret = Fonds_map.update(val,options);break;
+        case 'akciahistory': ret = History.update(val,options);break;
     }
     return ret;
 }

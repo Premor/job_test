@@ -1,0 +1,27 @@
+@{import('db.css','db.js')}
+@{if model.err}
+    <p>Ошибка. @{model.err}</p>
+@{else}
+    <button value="Добавить" name="add">Добавить</button>
+    <div class="boxf">
+        <div class="row">
+        @{foreach m in model.data[0]}
+            <div class="col">@{m.key}</div>
+        @{end}
+        <div class="col">upd</div>
+        <div class="col">del</div>
+        </div>
+        
+        @{foreach m in model.data}
+            <div class="row">
+            @{foreach e in m}
+                    <div class="col">@{e.value}</div>   
+            @{end}
+            <div class="col"><button value="@{m.id}" name="change">upd</button></div>
+            <div class="col"><button value="@{m.id}" name="delete">del</button></div>
+            </div>
+        @{end}
+    </div>
+@{fi}
+
+
