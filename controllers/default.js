@@ -12,12 +12,14 @@ exports.install = function () {
 	//select table
 	ROUTE('GET /db/', db_select_view);
 
-	//func admin
-	ROUTE('GET /functions/add-money/',add_money_view);
-	ROUTE('POST /functions/add-money/',add_money);
+	ROUTE('GET /test/add_money_fond/', test_add_money);
 
-	ROUTE('GET /client/add/',client_add_view);
-	ROUTE('POST /client/add/',client_add,['upload'],50000);
+	//func admin
+	ROUTE('GET /functions/add-money/', add_money_view);
+	ROUTE('POST /functions/add-money/', add_money);
+
+	ROUTE('GET /client/add/', client_add_view);
+	ROUTE('POST /client/add/', client_add, ['upload'], 50000);
 	//func for table
 	ROUTE('GET /db/add/{table}/', db_add_view);
 	ROUTE('POST /db/add/{table}/', db_add);
@@ -25,14 +27,13 @@ exports.install = function () {
 	ROUTE('GET /db/change/{table}/', db_add_view);
 	ROUTE('POST /db/change/{table}/', db_change);
 	ROUTE('GET /db/view/{table}/', db_view);
-	ROUTE('GET /test/add_money_fond/',test_add_money);
 
-	ROUTE('GET /test/',test);
+
+	ROUTE('GET /test/', test);
 };
 
 const DB = require('../modules/db');
 const SQL = require('../modules/sql_scripts');
-
 
 
 function view_cms() {
@@ -215,8 +216,8 @@ function db_view(table) {
 			break;
 		case 'investors':
 			options = {
-				attributes: ['balance',['balance','Инвестировано средств'], 'first_name', 'middle_name', 'last_name', ],
-				group:['id']
+				attributes: ['balance', ['balance', 'Инвестировано средств'], 'first_name', 'middle_name', 'last_name', ],
+				group: ['id']
 			};
 			break;
 
@@ -235,7 +236,7 @@ function db_view(table) {
 		default:
 			options = {};
 	}
-	specific_view(this,table,options);
+	specific_view(this, table, options);
 	// DB.findAll(table, options)
 	// 	.then(val => {
 	// 		let data = [];
@@ -247,7 +248,7 @@ function db_view(table) {
 	// 					delete i.dataValues['Управляющий'].dataValues.first_name;
 	// 					delete i.dataValues['Управляющий'].dataValues.middle_name;
 	// 					delete i.dataValues['Управляющий'].dataValues.last_name;
-	// 					// data.push(i.dataValues);
+	// 					//позор мне за этот говнокод, надо исправить(наверное)
 	// 				};
 	// 				break;
 	// 			case 'fonds_map':
@@ -261,13 +262,14 @@ function db_view(table) {
 	// 				};
 	// 				break;
 	// 			case 'likvid_book':
-	// 				for(i of val){
-	// 				i.dataValues['Цена пая'] = i.pay_price
-	// 				//console.log(val[0])
-	// 				//i.dataValues.pray
-	// 				};break;
+	// 				for (i of val) {
+	// 					i.dataValues['Цена пая'] = i.pay_price
+	// 					//console.log(val[0])
+	// 					//i.dataValues.pray
+	// 				};
+	// 				break;
 	// 			case 'investors':
-	// 				for (i of val){
+	// 				for (i of val) {
 	// 					//i.dataValues['Инвестировано средств'] =
 	// 				}
 	// 		}
@@ -319,66 +321,153 @@ function db_change(table) {
 }
 
 
-function client_add_view(){
+function client_add_view() {
 	this.view('client/add');
 }
 
-function client_add(){
+function client_add() {
 	console.log(this.body)
-	DB.create('investors',this.body)
-	.then((val) => {
-		this.json({
-			ok: val
+	DB.create('investors', this.body)
+		.then((val) => {
+			this.json({
+				ok: val
+			});
+		})
+		.catch((err) => {
+			this.json({
+				err: err
+			});
 		});
-	})
-	.catch((err) => {
-		this.json({
-			err: err
-		});
-	});
 }
 
-function add_money_view(){
-	DB.findAll('fonds',{attributes:['id','name']})
-	.then((val)=>{let data=[];for (i of val){data.push(i.dataValues)}; this.view('functions/add_money',data);})
-	
+function add_money_view() {
+	DB.findAll('fonds', {
+			attributes: ['id', 'name']
+		})
+		.then((val) => {
+			let data = [];
+			for (i of val) {
+				data.push(i.dataValues)
+			};
+			this.view('functions/add_money', data);
+		})
+
 }
 
-function add_money(){
+async function add_money() {
 	let money = parseInt(this.body.money);
-	if (money){
-		DB.findAll('likvid_book',{where:{fond_id:this.body.id},limit:1,order:[['time','DESC']]})
-		.then((val)=>{let buf=val[0].dataValues; buf.likvidstoim+=money;buf.time = Date.now();delete buf.id;return DB.create('likvid_book',buf) })
-		.then((val)=>{this.json({ok:val})})
-		.catch((err)=>{this.json({err:err})})
+	if (money) {
+		try {
+			let count = (await DB.query_func.get_curr_count(this.body.id)).count;
+			console.log('MONEY COUNT', count);
+			let nav = (await DB.query_func.get_nav(this.body.id)).price;
+			let new_nav_history = {};
+			new_nav_history.fond_id = this.body.id;
+			new_nav_history.likvidstoim = count * nav + money;
+			new_nav_history.akciacount = count;
+			new_nav_history.time = Date.now();
+			const res = await DB.create('likvid_book', new_nav_history)
+			this.json({
+				ok: res
+			})
+		} catch (err) {
+			this.json({
+				err: err
+			})
+		}
 	}
 
-		//this.json({ok:'KAEF'});}
-	else {this.json({err:'Parasha',val:typeof money})};
+	//this.json({ok:'KAEF'});}
+	else {
+		this.json({
+			err: 'Parasha',
+			val: typeof money
+		})
+	};
 }
 
-async function specific_view(self,table,options){
-	
+async function specific_view(self, table, options) {
+
 	let res;
-	if (table == 'investors'){
-		try{
-		let buf = await DB.seq.query(SQL.get_money,{type:DB.seq.QueryTypes.SELECT})
-		//self.json({data:buf})
-		self.view('db_raw', {
-						ok: 'Connection has been established successfully.',
-						data: buf
-					});
-	}
-		catch(err){
-			self.json({err:err})
+	if (table == 'investors') {
+		try {
+			let buf = await DB.seq.query(SQL.get_money, {
+				type: DB.seq.QueryTypes.SELECT
+			})
+			//self.json({data:buf})
+			self.view('db_raw', {
+				ok: 'Connection has been established successfully.',
+				data: buf
+			});
+		} catch (err) {
+			self.json({
+				err: err
+			})
 		}
 	}
 }
-function test(){
-	DB.update('investors',)
+
+function test() {
+	DB.update('investors', )
 }
 
-function test_add_money(){
-	this.query.fond//fond investor money
+async function test_add_money() {
+	try {
+		if (this.query.type == 'raw') {
+			//let time = Date.now();
+			let res = await DB.seq.query(SQL.update_history)
+			//let rese = Date.now() - time
+			this.json({
+				data: res,
+				time: rese
+			})
+		}
+		const arg = {};
+		arg.money = parseInt(this.query.money);
+		arg.fond = parseInt(this.query.fond);
+		arg.investor = parseInt(this.query.investor);
+		//let time = Date.now()
+		let cur_investor = (await DB.findAll('investors', {
+			where: {
+				id: arg.investor
+			}
+		}))[0]
+		if (this.query.money && arg.money > 0 && cur_investor.balance >= arg.money) {
+			await DB.update('investors', {
+				balance: cur_investor.balance - arg.money
+			}, {
+				where: {
+					id: arg.investor
+				}
+			})
+			if (!this.query.fond) {
+				throw Error('havnt fond id')
+			}
+
+			let nav = await DB.query_func.get_nav(arg.fond);
+			console.log('TEST', test);
+			let res = await DB.create('akciahistory', {
+				fond_id: arg.fond,
+				investor_id: arg.investor,
+				akciacena: nav.price,
+				akciacount: arg.money / nav.price,
+				time: new Date(),
+			})
+			//let rese = Date.now() - time
+			this.json({
+				data: res,
+				time_test: test
+			})
+
+
+
+		} else {
+			throw Error('incorrect monney or not enough balance')
+		}
+	} catch (val) {
+		this.json({
+			err: val
+		})
+	}
 
 }

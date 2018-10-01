@@ -107,7 +107,8 @@ const Likvid_book = sequelize.define('likvid_book',{
         type:Sequelize.DOUBLE
     },
     voznagrupravl:{
-        type:Sequelize.DOUBLE
+        type:Sequelize.DOUBLE,
+        defaultValue:0.0
     },
     time:{
         type:Sequelize.DATE
@@ -402,18 +403,22 @@ const History = sequelize.define('akciahistory',{
     time:{
         type:Sequelize.DATE
     },
-    akciacount:{
-        type:Sequelize.DOUBLE
-    },
+    
     akciacenamiddle:{
-        type:Sequelize.DOUBLE
+        type:Sequelize.DOUBLE,
+        defaultValue:0.0
     },
     akciacenamaxmiddle:{
-        type:Sequelize.DOUBLE
+        type:Sequelize.DOUBLE,
+        defaultValue:0.0
     },
     voznagrupravl_bool:{
         type:Sequelize.BOOLEAN,
         defaultValue:false
+    },
+    likvid_book_id:{
+        type:Sequelize.INTEGER,
+        defaultValue:0,
     }
 },{
     freezeTableName:true,
@@ -422,6 +427,7 @@ const History = sequelize.define('akciahistory',{
 
 //Fond.hasMany(Likvid_book,{foreignKey:'fond_id',sourceKey:'name',targetKey:'name'});
 Likvid_book.belongsTo(Fond,{foreignKey:'fond_id'});
+//Likvid_book.belongsToMany(History,{foreignKey:'fond_id',sourceKey:'fond_id'})
 Fond.belongsTo(Investors,{foreignKey:'upravl_id',as:'Управляющий',});
 Fonds_map.belongsTo(Fond,{foreignKey:'fond_id'});
 Fonds_map.belongsTo(Investors,{foreignKey:'investor_id',as:'Инвестор'});
@@ -498,3 +504,7 @@ module.exports.update = (table,val,options={})=>{
     }
     return ret;
 }
+
+
+const Utils = require('./db_utils');
+module.exports.query_func = Utils
