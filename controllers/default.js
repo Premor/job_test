@@ -28,6 +28,8 @@ exports.install = function () {
 	ROUTE('POST /db/change/{table}/', db_change);
 	ROUTE('GET /db/view/{table}/', db_view);
 
+	ROUTE('GET /request/add/', add_request);
+	ROUTE('GET /request/accept/', accept_request);
 
 	ROUTE('GET /test/', test);
 };
@@ -91,6 +93,28 @@ function view_notices() {
 ///
 
 
+function add_request() {
+	DB.create('requests', {
+			fond_id: this.query.fond,
+			investor_id: this.query.investor,
+			request_action_id: this.query.request_id,
+			status_id: 3,
+			time: new Date(),
+			money: this.query.money,
+		})
+		.then((val) => {
+			this.json({
+				data: val
+			})
+		})
+		.catch((err) => {
+			this.json({
+				err: err
+			})
+		})
+
+}
+
 
 function db_add(table) {
 	DB.create(table, this.body)
@@ -107,6 +131,33 @@ function db_add(table) {
 
 }
 
+async function accept_request() {
+	await DB.seq.transaction(async (t) => {
+		try {
+			const id_parse = parseInt(this.query.id);
+			const buf = (await DB.update('requests', {
+				status_id: 1
+			}, {
+				where: {
+					id: id_parse,
+				},
+				transaction: t
+			}))[0]
+			console.log(buf);
+			if(!buf){throw new Error('update error')}
+			const req = (await DB.findAll('requests',{where:{
+				id: id_parse,
+			},
+			transaction:t,
+		}))[0]
+			console.log(req);
+			await test_add_money(t,this,this.query);
+		} catch (err) {
+			await t.rollback()
+			this.json({err:err})
+		}
+	})
+}
 
 function db_remove(table) {
 	if (this.query.id) {
@@ -419,50 +470,60 @@ function test() {
 	DB.update('investors', )
 }
 
-async function test_add_money() {
-	try {
-		if (this.query.type == 'raw') {
+async function test_add_money(t, self, args) {
+		if (args.type == 'raw') {
 			//let time = Date.now();
 			let res = await DB.seq.query(SQL.update_history)
 			//let rese = Date.now() - time
-			this.json({
+			self.json({
 				data: res,
 				time: rese
 			})
 		}
 		const arg = {};
-		arg.money = parseInt(this.query.money);
-		arg.fond = parseInt(this.query.fond);
-		arg.investor = parseInt(this.query.investor);
+		arg.money = parseInt(args.money);
+		arg.fond = parseInt(args.fond);
+		arg.investor = parseInt(args.investor);
 		//let time = Date.now()
-		let cur_investor = (await DB.findAll('investors', {
+		const cur_investor = (await DB.findAll('investors', {
 			where: {
 				id: arg.investor
-			}
+			},
+			transaction: t,
 		}))[0]
-		if (this.query.money && arg.money > 0 && cur_investor.balance >= arg.money) {
+		if (args.money && arg.money > 0 && cur_investor.balance >= arg.money) {
 			await DB.update('investors', {
 				balance: cur_investor.balance - arg.money
 			}, {
 				where: {
 					id: arg.investor
-				}
+				},
+				transaction: t
 			})
-			if (!this.query.fond) {
+			if (!args.fond) {
 				throw Error('havnt fond id')
 			}
-
-			let nav = await DB.query_func.get_nav(arg.fond);
+			if (!await DB.query_func.investor_fonds_exsist(cur_investor.id, arg.fond)) {
+				await DB.create('fonds_map', {
+					investor_id: cur_investor.id,
+					fond_id: arg.fond
+				}, {
+					transaction: t
+				})
+			}
+			const nav = await DB.query_func.get_nav(arg.fond);
 			console.log('TEST', test);
-			let res = await DB.create('akciahistory', {
+			const res = await DB.create('akciahistory', {
 				fond_id: arg.fond,
 				investor_id: arg.investor,
 				akciacena: nav.price,
 				akciacount: arg.money / nav.price,
 				time: new Date(),
+			}, {
+				transaction: t
 			})
 			//let rese = Date.now() - time
-			this.json({
+			self.json({
 				data: res,
 				time_test: test
 			})
@@ -472,10 +533,7 @@ async function test_add_money() {
 		} else {
 			throw Error('incorrect monney or not enough balance')
 		}
-	} catch (val) {
-		this.json({
-			err: val
-		})
-	}
+	 
+	
 
 }

@@ -33,22 +33,31 @@ const Test2 = sequelize.define('test2',{
     },
     names:{
         type: Sequelize.STRING,
-        defaultValue:''
+        allowNull:false
     }
 },{
     freezeTableName:true
 })
-Test1.belongsTo(Test2,{foreignKey:'names_id'})
-Test1.sync();
-Test2.sync();
+//Test1.belongsTo(Test2,{foreignKey:'names_id'})
+Test1.sync({force:true});
+Test2.sync({force:true});
+
+test();
 
 
-Test2.findAll({
-    attributes:['id',[sequelize.literal('(select names_id from test1)'),'TEST'],'names']
-})
-.then((val)=>{let test1 = 'ab';return Test2.findAll()})
-.then((val)=>{console.log(test1)})
-.catch((err)=>{console.log(err)})
+async function test(){
+    let z=2;
+    await (async()=>{z = 3})
+    await (async()=>{z = 4})
+    console.log(z)
+}
+
+ // Test2.findAll({
+//     attributes:['id',[sequelize.literal('(select names_id from test1)'),'TEST'],'names']
+// })
+// .then((val)=>{let test1 = 'ab';return Test2.findAll()})
+// .then((val)=>{console.log(test1)})
+// .catch((err)=>{console.log(err)})
 
 // Test1.create({names_id:0});
 // Test1.create({names_id:1});

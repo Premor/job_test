@@ -19,8 +19,20 @@ module.exports.get_nav = async (fond) => {
     }
 }
 
+module.exports.investor_fonds_exsist = async (investor, fond) => {
+    if (await DB.tables.fonds_map.findAll({
+            where: {
+                fond_id: fond,
+                investor_id: investor,
+            },
+            limit:1,
+        }).length != 0)
+        return true;
+    else return false;
+}
+
 module.exports.get_curr_count = async (fond) => {
-    let count = (await DB.tables.history.findAll({
+    return (await DB.tables.history.findAll({
         attributes: [
             [DB.seq.fn('sum', DB.seq.col('akciacount')), 'count']
         ],
@@ -28,7 +40,6 @@ module.exports.get_curr_count = async (fond) => {
             fond_id: fond,
         },
     }))[0].dataValues;
-    console.log("UTILS COUNT", count);
-    return count
+
 
 }

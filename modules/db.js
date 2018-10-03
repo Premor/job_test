@@ -437,6 +437,7 @@ const Request = sequelize.define('requests',{
     },
     currency_id:{
         type:Sequelize.INTEGER,
+        defaultValue:1,
     },
     status_id:{
         type:Sequelize.INTEGER,
@@ -492,6 +493,17 @@ const Request = sequelize.define('requests',{
     freezeTableName:true,
     timestamps:false    
 })
+const Status = sequelize.define('status',{
+    title:{
+        type: Sequelize.STRING
+    },
+    ordering:{
+        type:Sequelize.INTEGER,
+    }
+},{
+    freezeTableName:true,
+    timestamps:false
+})
 //Fond.hasMany(Likvid_book,{foreignKey:'fond_id',sourceKey:'name',targetKey:'name'});
 Likvid_book.belongsTo(Fond,{foreignKey:'fond_id'});
 //Likvid_book.belongsToMany(History,{foreignKey:'fond_id',sourceKey:'fond_id'})
@@ -508,6 +520,7 @@ Investors.sync();
 Fonds_map.sync();
 History.sync();
 Request.sync();
+Status.sync();
 
 
 module.exports.seq = sequelize;
@@ -519,6 +532,7 @@ module.exports.tables = {countries:Countries,
     fonds_map:Fonds_map,
     history:History,
     request:Request,
+    status:Status,
 };
 
 module.exports.findAll = (table,options={})=>{
@@ -531,6 +545,7 @@ module.exports.findAll = (table,options={})=>{
         case 'investors': ret = Investors.findAll(options);break;
         case 'fonds_map': ret = Fonds_map.findAll(options);break;
         case 'akciahistory': ret = History.findAll(options);break;
+        case 'requests': ret = Request.findAll(options);break;
     }
     return ret;
 }
@@ -545,6 +560,7 @@ module.exports.create = (table,val,options={})=>{
         case 'investors': ret = Investors.create(val,options);break;
         case 'fonds_map': ret = Fonds_map.create(val,options);break;
         case 'akciahistory': ret = History.create(val,options);break;
+        case 'requests': ret = Request.create(val,options);break;
     }
     return ret;
 }
@@ -558,6 +574,7 @@ module.exports.destroy = (table,options={})=>{
         case 'investors': ret = Investors.destroy(options);break;
         case 'fonds_map': ret = Fonds_map.destroy(options);break;
         case 'akciahistory': ret = History.destroy(options);break;
+        case 'requests': ret = Request.destroy(options);break;
     }
     return ret;
 }
@@ -571,6 +588,7 @@ module.exports.update = (table,val,options={})=>{
         case 'investors': ret = Investors.update(val,options);break;
         case 'fonds_map': ret = Fonds_map.update(val,options);break;
         case 'akciahistory': ret = History.update(val,options);break;
+        case 'requests': ret = Request.update(val,options);break;
     }
     return ret;
 }
