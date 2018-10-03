@@ -131,31 +131,65 @@ function db_add(table) {
 
 }
 
-async function accept_request() {
-	await DB.seq.transaction(async (t) => {
-		try {
-			const id_parse = parseInt(this.query.id);
-			const buf = (await DB.update('requests', {
-				status_id: 1
+// async function accept_request() {
+// 	await DB.seq.transaction(async (t) => {
+// 		try {
+// 			const id_parse = parseInt(this.query.id);
+// 			const buf = (await DB.update('requests', {
+// 				status_id: 1
+// 			}, {
+// 				where: {
+// 					id: id_parse,
+// 				},
+// 				transaction: t
+// 			}))[0]
+// 			console.log(buf);
+// 			if(!buf){throw new Error('update error')}
+// 			const req = (await DB.findAll('requests',{where:{
+// 				id: id_parse,
+// 			},
+// 			transaction:t,
+// 		}))[0]
+// 			console.log(req);
+// 			await test_add_money(t,this,this.query);
+// 		} catch (err) {
+// 			await t.rollback()
+// 			this.json({err:err})
+// 		}
+// 	})
+// }
+
+function accept_request() {
+	let t;
+ DB.seq.transaction( (t_) => {
+	t = t_;		
+	const id_parse = parseInt(this.query.id);
+			return DB.update('requests', {
+				s0tatus_id: 1
 			}, {
 				where: {
 					id: id_parse,
 				},
 				transaction: t
-			}))[0]
-			console.log(buf);
-			if(!buf){throw new Error('update error')}
-			const req = (await DB.findAll('requests',{where:{
-				id: id_parse,
-			},
-			transaction:t,
-		}))[0]
-			console.log(req);
-			await test_add_money(t,this,this.query);
-		} catch (err) {
-			await t.rollback()
+			}).then((buf)=>{
+				buf = buf[0]
+				console.log(buf);
+				if(!buf){throw new Error('update error')}
+				return DB.findAll('requests',{where:{
+					id: id_parse,
+				},
+				transaction:t,
+			}).then((req)=>{
+				req = req[0]
+				console.log(req);
+			    return test_add_money(t,this,this.query);
+			})
+				
+				
+	
+			}).catch((err)=> {
 			this.json({err:err})
-		}
+		})
 	})
 }
 
