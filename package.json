@@ -8,6 +8,7 @@
     "url": "https://github.com/totaljs/cms"
   },
   "dependencies": {
+    "big.js": "^5.1.2",
     "mysql2": "^1.6.1",
     "sequelize": "^4.38.1",
     "total.js": "latest"

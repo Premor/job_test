@@ -5,7 +5,7 @@ SELECT 	inv.id,
         title,
         money,
         money*last_nav AS last_money,
-        countac*last_nav AS another_last_money,
+        countac*last_nav AS 'Средства',
         last_nav
 FROM test.investors inv left outer
 JOIN test.fonds fo

@@ -425,6 +425,73 @@ const History = sequelize.define('akciahistory',{
     timestamps:false
 });
 
+const Request = sequelize.define('requests',{
+    fond_id:{
+        type:Sequelize.INTEGER,
+    },
+    investor_id:{
+        type:Sequelize.INTEGER,
+    },
+    request_action_id:{
+        type:Sequelize.INTEGER,
+    },
+    currency_id:{
+        type:Sequelize.INTEGER,
+    },
+    status_id:{
+        type:Sequelize.INTEGER,
+    },
+    text:{
+        type:Sequelize.TEXT,
+        defaultValue:''
+    },
+    status_comment:{
+        type:Sequelize.TEXT,
+        defaultValue:''
+    },
+    time:{
+        type:Sequelize.DATE,  
+    },
+    money:{
+        type:Sequelize.DOUBLE,
+        defaultValue:0.0
+    },
+    commission:{
+        type:Sequelize.DOUBLE,
+        defaultValue:0.0
+    },
+    beneficiary_name:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    account_number:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    beneficiary_bank_name:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    swift:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    beneficiary_address:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    bank_address:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+    invoice_file:{
+        type:Sequelize.STRING,
+        defaultValue:''
+    },
+},{
+    freezeTableName:true,
+    timestamps:false    
+})
 //Fond.hasMany(Likvid_book,{foreignKey:'fond_id',sourceKey:'name',targetKey:'name'});
 Likvid_book.belongsTo(Fond,{foreignKey:'fond_id'});
 //Likvid_book.belongsToMany(History,{foreignKey:'fond_id',sourceKey:'fond_id'})
@@ -440,6 +507,8 @@ Fond.sync();
 Investors.sync();
 Fonds_map.sync();
 History.sync();
+Request.sync();
+
 
 module.exports.seq = sequelize;
 module.exports.tables = {countries:Countries,
@@ -449,6 +518,7 @@ module.exports.tables = {countries:Countries,
     investors:Investors,
     fonds_map:Fonds_map,
     history:History,
+    request:Request,
 };
 
 module.exports.findAll = (table,options={})=>{

@@ -136,11 +136,7 @@ function db_select_view() {
 	this.view('select-table');
 }
 
-function db_view(table) {
-	console.log('VIEW', table);
-	let options;
-
-
+function get_options(table) {
 	switch (table) {
 		case 'countries':
 			options = {
@@ -236,53 +232,15 @@ function db_view(table) {
 		default:
 			options = {};
 	}
+}
+
+function db_view(table) {
+	console.log('VIEW', table);
+	let options;
+
+	options = get_options(table);
+
 	specific_view(this, table, options);
-	// DB.findAll(table, options)
-	// 	.then(val => {
-	// 		let data = [];
-	// 		switch (table) {
-	// 			case 'fonds':
-	// 				for (i of val) {
-
-	// 					i.dataValues['Управляющий'].dataValues.full_name = i.dataValues['Управляющий'].fullName;
-	// 					delete i.dataValues['Управляющий'].dataValues.first_name;
-	// 					delete i.dataValues['Управляющий'].dataValues.middle_name;
-	// 					delete i.dataValues['Управляющий'].dataValues.last_name;
-	// 					//позор мне за этот говнокод, надо исправить(наверное)
-	// 				};
-	// 				break;
-	// 			case 'fonds_map':
-	// 				for (i of val) {
-
-	// 					i.dataValues['Инвестор'].dataValues.full_name = i.dataValues['Инвестор'].fullName;
-	// 					delete i.dataValues['Инвестор'].dataValues.first_name;
-	// 					delete i.dataValues['Инвестор'].dataValues.middle_name;
-	// 					delete i.dataValues['Инвестор'].dataValues.last_name;
-	// 					// data.push(i.dataValues);
-	// 				};
-	// 				break;
-	// 			case 'likvid_book':
-	// 				for (i of val) {
-	// 					i.dataValues['Цена пая'] = i.pay_price
-	// 					//console.log(val[0])
-	// 					//i.dataValues.pray
-	// 				};
-	// 				break;
-	// 			case 'investors':
-	// 				for (i of val) {
-	// 					//i.dataValues['Инвестировано средств'] =
-	// 				}
-	// 		}
-	// 		this.view('db', {
-	// 			ok: 'Connection has been established successfully.',
-	// 			data: val
-	// 		});
-	// 	})
-	// 	.catch(err => {
-	// 		this.view('db', {
-	// 			err: `Unable to connect to the database:${err}`
-	// 		});
-	// 	});
 
 }
 
@@ -389,21 +347,71 @@ async function add_money() {
 async function specific_view(self, table, options) {
 
 	let res;
-	if (table == 'investors') {
-		try {
-			let buf = await DB.seq.query(SQL.get_money, {
-				type: DB.seq.QueryTypes.SELECT
-			})
-			//self.json({data:buf})
-			self.view('db_raw', {
-				ok: 'Connection has been established successfully.',
-				data: buf
-			});
-		} catch (err) {
-			self.json({
-				err: err
-			})
-		}
+	switch (table) {
+		case 'investors':
+			try {
+				//let buf = await DB.
+
+				let buf = await DB.seq.query(SQL.get_money, {
+					type: DB.seq.QueryTypes.SELECT
+				})
+				//self.json({data:buf})
+				self.view('db_raw', {
+					ok: 'Connection has been established successfully.',
+					data: buf
+				});
+			} catch (err) {
+				self.json({
+					err: err
+				})
+			};
+			break;
+		default:
+			try {
+				let val = await DB.findAll(table, options)
+				let data = [];
+				switch (table) {
+					case 'fonds':
+						for (i of val) {
+
+							i.dataValues['Управляющий'].dataValues.full_name = i.dataValues['Управляющий'].fullName;
+							delete i.dataValues['Управляющий'].dataValues.first_name;
+							delete i.dataValues['Управляющий'].dataValues.middle_name;
+							delete i.dataValues['Управляющий'].dataValues.last_name;
+							//позор мне за этот говнокод, надо исправить(наверное)
+						};
+						break;
+					case 'fonds_map':
+						for (i of val) {
+
+							i.dataValues['Инвестор'].dataValues.full_name = i.dataValues['Инвестор'].fullName;
+							delete i.dataValues['Инвестор'].dataValues.first_name;
+							delete i.dataValues['Инвестор'].dataValues.middle_name;
+							delete i.dataValues['Инвестор'].dataValues.last_name;
+							// data.push(i.dataValues);
+						};
+						break;
+					case 'likvid_book':
+						for (i of val) {
+							i.dataValues['Цена пая'] = i.pay_price
+							//console.log(val[0])
+							//i.dataValues.pray
+						};
+						break;
+					case 'investors':
+						for (i of val) {
+							//i.dataValues['Инвестировано средств'] =
+						}
+				}
+				self.view('db', {
+					ok: 'Connection has been established successfully.',
+					data: val
+				});
+			} catch (err) {
+				self.view('db', {
+					err: `Unable to connect to the database:${err}`
+				});
+			}
 	}
 }
 

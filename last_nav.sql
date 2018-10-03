@@ -1,4 +1,11 @@
-select li.fond_id,likvidstoim/akciacount as last_nav,time from test.likvid_book li    
-join (select fond_id,max(time) as timeM from test.likvid_book group by fond_id) l on li.fond_id = l.fond_id and li.time=l.timeM  
-                
-                
+SELECT li.fond_id,
+        likvidstoim/akciacount AS last_nav,
+        time
+FROM test.likvid_book li
+JOIN 
+    (SELECT fond_id,
+        max(time) AS timeM
+    FROM test.likvid_book
+    GROUP BY  fond_id) l
+    ON li.fond_id = l.fond_id
+        AND li.time=l.timeM 
