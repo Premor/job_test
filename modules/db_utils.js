@@ -20,14 +20,15 @@ module.exports.get_nav = async (fond) => {
 }
 
 module.exports.investor_fonds_exsist = async (investor, fond) => {
-    if (await DB.tables.fonds_map.findAll({
-            where: {
-                fond_id: fond,
-                investor_id: investor,
-            },
-            limit:1,
-        }).length != 0)
-        return true;
+    let test = await DB.tables.fonds_map.findAll({
+        where: {
+            fond_id: fond,
+            investor_id: investor,
+        },
+        limit:1,
+    })
+    console.log('INNER EXSIST',test);
+    if (test.length != 0) return true;
     else return false;
 }
 
