@@ -12,8 +12,6 @@ exports.install = function () {
 	//select table
 	ROUTE('GET /db/', db_select_view);
 
-	ROUTE('GET /test/add_money_fond/', test_add_money);
-
 	//func admin
 	ROUTE('GET /functions/add-money/', add_money_view);
 	ROUTE('POST /functions/add-money/', add_money);
@@ -31,7 +29,7 @@ exports.install = function () {
 	ROUTE('GET /request/add/', add_request);
 	ROUTE('GET /request/accept/', accept_request);
 
-	ROUTE('GET /test/', test);
+	//ROUTE('GET /test/', test);
 };
 
 const DB = require('../modules/db');
@@ -179,7 +177,6 @@ async function accept_request() {
 			throw Error('havnt fond id')
 		}
 		let check = await DB.query_func.investor_fonds_exsist(cur_investor.id, arg.fond)
-		console.log('EXIST',check);
 		if (!check) {
 			await DB.create('fonds_map', {
 				investor_id: cur_investor.id,
@@ -189,7 +186,6 @@ async function accept_request() {
 			})
 		}
 		const nav = await DB.query_func.get_nav(arg.fond);
-		//console.log('TEST', test);
 		const res = await DB.create('akciahistory', {
 			fond_id: arg.fond,
 			investor_id: arg.investor,
@@ -200,14 +196,10 @@ async function accept_request() {
 			transaction: t
 		})
 		await t.commit()
-		//let rese = Date.now() - time
 		self.json({
 			data: res,
 			time_test: test
 		})
-
-
-
 	} else {
 		throw Error('incorrect monney or not enough balance')
 	}
@@ -218,95 +210,6 @@ async function accept_request() {
 	
 }
 
-// function accept_request() {
-// 	let t;
-// 	const arg = {};
-// 	arg.money = parseInt(this.query.money);
-// 	arg.fond = parseInt(this.query.fond);
-// 	arg.investor = parseInt(this.query.investor);
-// 	let request;
-//  DB.seq.transaction( (t_) => {
-// 	t = t_;		
-// 	const id_parse = parseInt(this.query.id);
-// 			return DB.update('requests', {
-// 				s0tatus_id: 1
-// 			}, {
-// 				where: {
-// 					id: id_parse,
-// 				},
-// 				transaction: t
-// 			}).then((buf)=>{
-// 				buf = buf[0]
-// 				console.log(buf);
-// 				if(!buf){throw new Error('update error')}
-// 				return DB.findAll('requests',{where:{
-// 					id: id_parse,
-// 				},
-// 				transaction:t,
-// 			}).then((req)=>{
-// 				request = req[0]
-// 	return DB.findAll('investors', {
-// 		where: {
-// 			id: arg.investor
-// 		},
-// 		transaction: t,
-// 	})})
-// 	.then((cur_investor)=>{
-// 		if (!(args.money && request.money > 0 && cur_investor.balance >= request.money)) {throw new Error()}
-// 		return DB.update('investors', {
-// 			balance: cur_investor.balance - request.money
-// 		}, {
-// 			where: {
-// 				id: request.investor
-// 			},
-// 			transaction: t
-// 		})
-// 	})
-		
-// 		if (!args.fond) {
-// 			throw Error('havnt fond id')
-// 		}
-// 		if (!await DB.query_func.investor_fonds_exsist(cur_investor.id, arg.fond)) {
-// 			await DB.create('fonds_map', {
-// 				investor_id: cur_investor.id,
-// 				fond_id: arg.fond
-// 			}, {
-// 				transaction: t
-// 			})
-// 		}
-// 		const nav = await DB.query_func.get_nav(arg.fond);
-// 		console.log('TEST', test);
-// 		const res = await DB.create('akciahistory', {
-// 			fond_id: arg.fond,
-// 			investor_id: arg.investor,
-// 			akciacena: nav.price,
-// 			akciacount: arg.money / nav.price,
-// 			time: new Date(),
-// 		}, {
-// 			transaction: t
-// 		})
-// 		//let rese = Date.now() - time
-// 		self.json({
-// 			data: res,
-// 			time_test: test
-// 		})
-
-
-
-// 	} else {
-// 		throw Error('incorrect monney or not enough balance')
-// 	}
- 
-
-// 			})
-				
-				
-	
-// 			}).catch((err)=> {
-// 			this.json({err:err})
-// 		})
-// 	})
-// }
 
 function db_remove(table) {
 	if (this.query.id) {
@@ -350,7 +253,6 @@ function get_options(table) {
 		case 'fonds':
 			options = {
 				include: [{
-					//as:'Управляющий',
 					model: DB.tables.investors,
 					as: 'Управляющий',
 					required: true,
@@ -416,19 +318,6 @@ function get_options(table) {
 				group: ['id']
 			};
 			break;
-
-
-			// case 'likvid_book':DB.seq.query('SELECT nekrus_ecofin_lk.likvid_book.fond_id,nekrus_ecofin_lk.likvid_book.akciacount,nekrus_ecofin_lk.likvid_book.likvidstoim,nekrus_ecofin_lk.fonds.name FROM nekrus_ecofin_lk.likvid_book left outer join nekrus_ecofin_lk.fonds on nekrus_ecofin_lk.fonds.id = nekrus_ecofin_lk.likvid_book.fond_id',{model:DB.tables[DB.tables.length-2]}).then(val => {
-			// 	if (!val){throw Error('haven\'t value')}
-			// 	this.view('db', {
-			// 		ok: 'Connection has been established successfully.',
-			// 		data: val
-			// 	});
-			// }) ; break;
-
-
-
-
 		default:
 			options = {};
 	}
@@ -484,7 +373,6 @@ function client_add_view() {
 }
 
 function client_add() {
-	console.log(this.body)
 	DB.create('investors', this.body)
 		.then((val) => {
 			this.json({
@@ -517,7 +405,6 @@ async function add_money() {
 	if (money) {
 		try {
 			let count = (await DB.query_func.get_curr_count(this.body.id)).count;
-			console.log('MONEY COUNT', count);
 			let nav = (await DB.query_func.get_nav(this.body.id)).price;
 			let new_nav_history = {};
 			new_nav_history.fond_id = this.body.id;
@@ -534,9 +421,7 @@ async function add_money() {
 			})
 		}
 	}
-
-	//this.json({ok:'KAEF'});}
-	else {
+else {
 		this.json({
 			err: 'Parasha',
 			val: typeof money
@@ -550,12 +435,10 @@ async function specific_view(self, table, options) {
 	switch (table) {
 		case 'investors':
 			try {
-				//let buf = await DB.
 
 				let buf = await DB.seq.query(SQL.get_money, {
 					type: DB.seq.QueryTypes.SELECT
 				})
-				//self.json({data:buf})
 				self.view('db_raw', {
 					ok: 'Connection has been established successfully.',
 					data: buf
@@ -613,86 +496,4 @@ async function specific_view(self, table, options) {
 				});
 			}
 	}
-}
-
-function test() {
-	DB.update('investors', )
-}
-
-// async function test_add_money(t, self, args) {
-// 		if (args.type == 'raw') {
-// 			//let time = Date.now();
-// 			let res = await DB.seq.query(SQL.update_history)
-// 			//let rese = Date.now() - time
-// 			self.json({
-// 				data: res,
-// 				time: rese
-// 			})
-// 		}
-// 		const arg = {};
-// 		arg.money = parseInt(args.money);
-// 		arg.fond = parseInt(args.fond);
-// 		arg.investor = parseInt(args.investor);
-// 		//let time = Date.now()
-// 		const cur_investor = (await DB.findAll('investors', {
-// 			where: {
-// 				id: arg.investor
-// 			},
-// 			transaction: t,
-// 		}))[0]
-// 		if (args.money && arg.money > 0 && cur_investor.balance >= arg.money) {
-// 			await DB.update('investors', {
-// 				balance: cur_investor.balance - arg.money
-// 			}, {
-// 				where: {
-// 					id: arg.investor
-// 				},
-// 				transaction: t
-// 			})
-// 			if (!args.fond) {
-// 				throw Error('havnt fond id')
-// 			}
-// 			if (!await DB.query_func.investor_fonds_exsist(cur_investor.id, arg.fond)) {
-// 				await DB.create('fonds_map', {
-// 					investor_id: cur_investor.id,
-// 					fond_id: arg.fond
-// 				}, {
-// 					transaction: t
-// 				})
-// 			}
-// 			const nav = await DB.query_func.get_nav(arg.fond);
-// 			console.log('TEST', test);
-// 			const res = await DB.create('akciahistory', {
-// 				fond_id: arg.fond,
-// 				investor_id: arg.investor,
-// 				akciacena: nav.price,
-// 				akciacount: arg.money / nav.price,
-// 				time: new Date(),
-// 			}, {
-// 				transaction: t
-// 			})
-// 			//let rese = Date.now() - time
-// 			self.json({
-// 				data: res,
-// 				time_test: test
-// 			})
-
-
-
-// 		} else {
-// 			throw Error('incorrect monney or not enough balance')
-// 		}
-	 
-	
-
-// }
-
-async function test_add_money(t, self, args) {
-	try{
- 
-}catch(err){
-	t.rollback();
-	self.json({err:err})
-}
-
 }

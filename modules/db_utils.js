@@ -11,7 +11,6 @@ module.exports.get_nav = async (fond) => {
             ['time', 'desc']
         ],
     }))[0].dataValues
-    console.log("UTILS NAV", nav);
     return {
         price: nav.likvidstoim / nav.akciacount,
         count: nav.akciacount,
