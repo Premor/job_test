@@ -130,86 +130,167 @@ function db_add(table) {
 }
 
 async function accept_request() {
-	const t = await DB.seq.transaction({autocommit:false})//async (t) => {
-		try {
-			const id_parse = parseInt(this.query.id);
-			const buf = (await DB.update('requests', {
+	const t = await DB.seq.transaction({
+		autocommit: false
+	}) //async (t) => {
+	try {
+		const id_parse = parseInt(this.query.id);
+		const req = (await DB.findAll('requests', {
+			where: {
+				id: id_parse,
+			},
+		}))[0]
+		if (req.status_id != 3) {
+			throw new Error('can not accept')
+		}
+		if (!((await DB.update('requests', {
 				status_id: 1
 			}, {
 				where: {
 					id: id_parse,
 				},
 				transaction: t
-			}))[0]
-			console.log(buf);
-			if(!buf){throw new Error('update error')}
-			const req = (await DB.findAll('requests',{where:{
-				id: id_parse,
-			},
-		}))[0]
-			console.log(req);
-			//await test_add_money(t,this,this.query);
-			//
-			const self = this;
-			const arg = {};
-	arg.money = req.money;
-	arg.fond = req.fond_id;
-	arg.investor = req.investor_id;
-	//let time = Date.now()
-	console.log('ARG',arg)
-	const cur_investor = (await DB.findAll('investors', {
-		where: {
-			id: arg.investor
-		},
-		transaction: t,
-	}))[0]
-	//console.log('INVESTOR',cur_investor.balance)
-	if (arg.money && arg.money > 0 && cur_investor.balance >= arg.money) {
-		await DB.update('investors', {
-			balance: cur_investor.balance - arg.money
-		}, {
-			where: {
-				id: arg.investor
-			},
-			transaction: t
-		})
-		if (!arg.fond) {
+			}))[0])) {
+			throw new Error('update error')
+		}
+		const self = this;
+		if (!req.investor_id || !req.money || !req.fond_id) {
 			throw Error('havnt fond id')
 		}
-		let check = await DB.query_func.investor_fonds_exsist(cur_investor.id, arg.fond)
-		if (!check) {
-			await DB.create('fonds_map', {
+		const cur_investor = (await DB.findAll('investors', {
+			where: {
+				id: req.investor_id
+			},
+			transaction: t,
+		}))[0]
+		switch (req.request_action_id) {
+			case 1:
+				await money_in_system(cur_investor, req, t);
+				break;
+			case 2:
+				await money_out_system(cur_investor, req, t);
+				break;
+			case 3:
+				await money_to_fond(cur_investor, req, t);
+				break;
+			case 4:
+				await money_out_fond(cur_investor, req, t);
+				break;
+			default:
+				throw new Error('unknow request action');
+		}
+		await t.commit()
+		self.json({
+			success: true,
+			//time_test: test
+		})
+	} catch (err) {
+		console.log(err);
+		await t.rollback()
+		this.json({
+			err: err
+		})
+	}
+
+}
+
+async function money_in_system(cur_investor, req, t) {
+	if (!(await DB.update('investors', {
+			balance: cur_investor.balance + req.money
+		}, {
+			where: {
+				id: cur_investor.id
+			},
+			transaction: t
+		}))[0]) {
+		throw new Error('can not update investor balance')
+	}
+}
+
+async function money_out_system(cur_investor, req, t) {
+	if (cur_investor.balance - req.money < 0) throw new Error('dont enough money');
+	if (!(await DB.update('investors', {
+			balance: cur_investor.balance - req.money
+		}, {
+			where: {
+				id: cur_investor.id
+			},
+			transaction: t
+		}))[0]) {
+		throw new Error('can not update investor balance')
+	}
+}
+
+async function money_to_fond(cur_investor, req, t) {
+	if (!(req.money > 0 && cur_investor.balance >= req.money)) {
+		throw Error('incorrect monney or not enough balance')
+	}
+	await DB.update('investors', {
+		balance: cur_investor.balance - req.money
+	}, {
+		where: {
+			id: req.investor_id
+		},
+		transaction: t
+	})
+
+	const check = await DB.query_func.investor_fonds_exsist(cur_investor.id, req.fond_id)
+	if (!check) {
+		await DB.create('fonds_map', {
+			investor_id: cur_investor.id,
+			fond_id: req.fond_id
+		}, {
+			transaction: t
+		})
+	}
+	const nav = await DB.query_func.get_nav(req.fond_id);
+	await DB.create('akciahistory', {
+		fond_id: req.fond_id,
+		investor_id: req.investor_id,
+		akciacena: nav.price,
+		akciacount: req.money / nav.price,
+		time: new Date(),
+	}, {
+		transaction: t
+	})
+}
+
+async function money_out_fond(cur_investor, req, t) {
+	const pai = (await DB.query_func.get_count_pai(cur_investor.id, req.fond_id)).count;
+	const nav = await DB.query_func.get_nav(req.fond_id);
+	const curr_money = pai * nav.price;
+	if (!(req.money > 0 && curr_money >= req.money)) {
+		throw Error('incorrect monney or not enough balance')
+	}
+	await DB.update('investors', {
+		balance: cur_investor.balance + req.money
+	}, {
+		where: {
+			id: req.investor_id
+		},
+		transaction: t
+	})
+
+	const check = await DB.query_func.investor_fonds_exsist(cur_investor.id, req.fond_id)
+	if (!check) {
+		if (req.money == curr_money)
+			await DB.destroy('fonds_map', {
 				investor_id: cur_investor.id,
-				fond_id: arg.fond
+				fond_id: req.fond_id
 			}, {
 				transaction: t
 			})
-		}
-		const nav = await DB.query_func.get_nav(arg.fond);
-		const res = await DB.create('akciahistory', {
-			fond_id: arg.fond,
-			investor_id: arg.investor,
-			akciacena: nav.price,
-			akciacount: arg.money / nav.price,
-			time: new Date(),
-		}, {
-			transaction: t
-		})
-		await t.commit()
-		self.json({
-			data: res,
-			time_test: test
-		})
-	} else {
-		throw Error('incorrect monney or not enough balance')
 	}
-		} catch (err) {
-			await t.rollback()
-			this.json({err:err})
-		}
-	
+	await DB.create('akciahistory', {
+		fond_id: req.fond_id,
+		investor_id: req.investor_id,
+		akciacena: nav.price,
+		akciacount: -(req.money / nav.price)(req.money / nav.price),
+		time: new Date(),
+	}, {
+		transaction: t
+	})
 }
-
 
 function db_remove(table) {
 	if (this.query.id) {
@@ -420,8 +501,7 @@ async function add_money() {
 				err: err
 			})
 		}
-	}
-else {
+	} else {
 		this.json({
 			err: 'Parasha',
 			val: typeof money
