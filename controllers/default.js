@@ -29,7 +29,7 @@ exports.install = function () {
 	ROUTE('GET /request/add/', add_request);
 	ROUTE('GET /request/accept/', accept_request);
 
-	//ROUTE('GET /test/', test);
+	ROUTE('GET /test/',vt);
 };
 
 const DB = require('../modules/db');
@@ -89,6 +89,8 @@ function view_notices() {
 ///
 ///
 ///
+
+function vt(){this.view('test')}
 
 
 function add_request() {
@@ -321,6 +323,7 @@ function db_select_view() {
 }
 
 function get_options(table) {
+	let options;
 	switch (table) {
 		case 'countries':
 			options = {
@@ -338,7 +341,7 @@ function get_options(table) {
 					as: 'Управляющий',
 					required: true,
 					//raw:true,
-					attributes: ['first_name', 'middle_name', 'last_name', ['first_name', 'full_name']]
+					attributes: ['first_name', 'middle_name', 'last_name']
 				}],
 				attributes: [
 					['name', 'Идентификатор'],
@@ -402,6 +405,7 @@ function get_options(table) {
 		default:
 			options = {};
 	}
+	return options;
 }
 
 function db_view(table) {
@@ -512,11 +516,12 @@ async function add_money() {
 async function specific_view(self, table, options) {
 
 	let res;
+	let buf;
 	switch (table) {
 		case 'investors':
 			try {
 
-				let buf = await DB.seq.query(SQL.get_money, {
+				buf = await DB.seq.query(SQL.get_money, {
 					type: DB.seq.QueryTypes.SELECT
 				})
 				self.view('db_raw', {
@@ -535,24 +540,32 @@ async function specific_view(self, table, options) {
 				let data = [];
 				switch (table) {
 					case 'fonds':
-						for (i of val) {
+						for (i=0;i<val.length;i++ ) {
+							val[i].dataValues['Управляющий'] = val[i]['Управляющий'].fullName 
+						}
+						console.log(val[0])
+						
+							buf = JSON.stringify(val);
+							val = JSON.parse(buf)
 
-							i.dataValues['Управляющий'].dataValues.full_name = i.dataValues['Управляющий'].fullName;
-							delete i.dataValues['Управляющий'].dataValues.first_name;
-							delete i.dataValues['Управляющий'].dataValues.middle_name;
-							delete i.dataValues['Управляющий'].dataValues.last_name;
-							//позор мне за этот говнокод, надо исправить(наверное)
-						};
+							// i.dataValues['Управляющий'].dataValues.full_name = i.dataValues['Управляющий'].fullName;
+							// delete i.dataValues['Управляющий'].dataValues.first_name;
+							// delete i.dataValues['Управляющий'].dataValues.middle_name;
+							// delete i.dataValues['Управляющий'].dataValues.last_name;
+							// //позор мне за этот говнокод, надо исправить(наверное)
+						//};
 						break;
 					case 'fonds_map':
-						for (i of val) {
+					buf = JSON.stringify(val);
+					val = JSON.parse(buf)
+						// for (i of val) {
 
-							i.dataValues['Инвестор'].dataValues.full_name = i.dataValues['Инвестор'].fullName;
-							delete i.dataValues['Инвестор'].dataValues.first_name;
-							delete i.dataValues['Инвестор'].dataValues.middle_name;
-							delete i.dataValues['Инвестор'].dataValues.last_name;
-							// data.push(i.dataValues);
-						};
+						// 	i.dataValues['Инвестор'].dataValues.full_name = i.dataValues['Инвестор'].fullName;
+						// 	delete i.dataValues['Инвестор'].dataValues.first_name;
+						// 	delete i.dataValues['Инвестор'].dataValues.middle_name;
+						// 	delete i.dataValues['Инвестор'].dataValues.last_name;
+						// 	// data.push(i.dataValues);
+						// };
 						break;
 					case 'likvid_book':
 						for (i of val) {
@@ -562,16 +575,20 @@ async function specific_view(self, table, options) {
 						};
 						break;
 					case 'investors':
-						for (i of val) {
-							//i.dataValues['Инвестировано средств'] =
+						break;
+						default:buf = JSON.stringify(val);
+						val = JSON.parse(buf);
+						for(i = 0;i < val.length-1;i++){
+						 	val[i].stringify = JSON.stringify(val[i])
+							console.log(val[i].stringify);
 						}
 				}
-				self.view('db', {
+				self.view('db_raw', {
 					ok: 'Connection has been established successfully.',
 					data: val
 				});
 			} catch (err) {
-				self.view('db', {
+				self.view('db_raw', {
 					err: `Unable to connect to the database:${err}`
 				});
 			}
