@@ -1,0 +1,10 @@
+.boxf{
+    padding-left: 3%;
+}
+.col{
+    flex-basis: 10%;
+    height: 50%;
+}
+.error{
+    color: red;
+}

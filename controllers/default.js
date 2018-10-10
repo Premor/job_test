@@ -13,8 +13,15 @@ exports.install = function () {
 	ROUTE('GET /db/', db_select_view);
 
 	//func admin
-	ROUTE('GET /functions/add-money/', add_money_view);
-	ROUTE('POST /functions/add-money/', add_money);
+	ROUTE('GET /functions/add-money/', function(){this.view('functions/add_money')});
+	
+	ROUTE('GET /api/functions/add-money/', add_money_view);
+	ROUTE('POST /api/functions/add-money/', add_money);
+
+	ROUTE('GET /functions/comission/', comisson_view);
+	ROUTE('GET /api/functions/comission/', comission_get);
+	ROUTE('POST /api/functions/comission/', comission_eval);
+
 
 	ROUTE('GET /client/add/', client_add_view);
 	ROUTE('POST /client/add/', client_add, ['upload'], 50000);
@@ -24,17 +31,21 @@ exports.install = function () {
 	ROUTE('GET /db/delete/{table}/', db_remove);
 	ROUTE('GET /db/change/{table}/', db_add_view);
 	ROUTE('POST /db/change/{table}/', db_change);
-	ROUTE('GET /db/view/{table}/', db_view);
+	ROUTE('GET /api/db/view/{table}/', db_view);
+	ROUTE('GET /db/view/{table}/', vt2);
+	
 
 	ROUTE('GET /request/add/', add_request);
 	ROUTE('GET /request/accept/', accept_request);
 
-	ROUTE('GET /test/',vt);
+	ROUTE('GET /test/',comission_eval);
+	ROUTE('GET /test2/',vt2);
+
 };
 
 const DB = require('../modules/db');
 const SQL = require('../modules/sql_scripts');
-
+const Alias_sql = require('../modules/alias_sql');
 
 function view_cms() {
 	this.CMSpage();
@@ -91,6 +102,8 @@ function view_notices() {
 ///
 
 function vt(){this.view('test')}
+
+function vt2(){this.view('db_raw')}
 
 
 function add_request() {
@@ -344,12 +357,13 @@ function get_options(table) {
 					attributes: ['first_name', 'middle_name', 'last_name']
 				}],
 				attributes: [
-					['name', 'Идентификатор'],
-					['title', 'Наименование'],
-					['invest_idea', 'Идея'],
-					['invest_idea_date_end', 'Дата окончания идеи'],
-					['published', 'Публиковать'],
-					['ordering', 'Порядок']
+					'id',
+					['name', Alias_sql.fonds.direct.name],
+					['title', Alias_sql.fonds.direct.title],
+					['invest_idea', Alias_sql.fonds.direct.invest_idea],
+					['invest_idea_date_end', Alias_sql.fonds.direct.invest_idea_date_end],
+					['published', Alias_sql.fonds.direct.published],
+					['ordering', Alias_sql.fonds.direct.ordering],
 				],
 				order: [
 					['name']
@@ -428,24 +442,37 @@ function db_select() {
 ////////////////////////////////////////
 
 function db_change(table) {
+	console.log(this.body);
+	let buf={}
+
 	for (i in this.body) {
 		if (this.body[i] == '') {
 			delete this.body[i];
+			continue;
+		};
+		if (Alias_sql[table].reverse[i]){
+			buf[Alias_sql[table].reverse[i]] = this.body[i];
 		}
+		else {
+			buf[i]=this.body[i];
+		}
+		 
 	}
-	if (this.query.id) {
-		DB.update(table, this.body, {
+	if (buf.id) {
+		DB.update(table, buf, {
 				where: {
-					id: this.query.id
+					id: buf.id
 				}
 			})
 			.then(() => {
-				this.redirect(`/db/view/${table}/`);
+				this.json({ok:'success'})
+				//this.redirect(`/db/view/${table}/`);
 			})
 			.catch(err => {
-				this.view('db', {
-					err: `Unable to connect to the database:${err}`
-				});
+				this.json({err:err})
+				// this.view('db', {
+				// 	err: `Unable to connect to the database:${err}`
+				// });
 			});
 	} else {
 		this.redirect('/db/');
@@ -480,9 +507,17 @@ function add_money_view() {
 			for (i of val) {
 				data.push(i.dataValues)
 			};
-			this.view('functions/add_money', data);
+			
+			this.json(data);
 		})
 
+}
+
+async function comission_eval(){
+	if(!(this.body.investor&&this.body.fond)){this.json({err:"Not enough args"})}
+	const q = (await DB.query_func.get_comission(this.body.fond,this.body.investor)).voznagrupravl;
+	const test = await DB.query_func.last_comission_payment(this.body.investor,this.body.fond)
+	console.log(test);
 }
 
 async function add_money() {
@@ -513,27 +548,38 @@ async function add_money() {
 	};
 }
 
+function comisson_view(){
+	this.view('comission');
+}
+
+async function comission_get(){
+	
+	this.json(await DB.seq.query(SQL.fonds_map,{type:DB.seq.QueryTypes.SELECT}))
+}
+
 async function specific_view(self, table, options) {
 
 	let res;
 	let buf;
 	switch (table) {
-		case 'investors':
-			try {
+		// case 'investors':
+		// 	try {
 
-				buf = await DB.seq.query(SQL.get_money, {
-					type: DB.seq.QueryTypes.SELECT
-				})
-				self.view('db_raw', {
-					ok: 'Connection has been established successfully.',
-					data: buf
-				});
-			} catch (err) {
-				self.json({
-					err: err
-				})
-			};
-			break;
+
+
+		// 		buf = await DB.seq.query(SQL.get_money, {
+		// 			type: DB.seq.QueryTypes.SELECT
+		// 		})
+		// 		self.view('db_raw', {
+		// 			ok: 'Connection has been established successfully.',
+		// 			data: buf
+		// 		});
+		// 	} catch (err) {
+		// 		self.json({
+		// 			err: err
+		// 		})
+		// 	};
+		// 	break;
 		default:
 			try {
 				let val = await DB.findAll(table, options)
@@ -575,20 +621,28 @@ async function specific_view(self, table, options) {
 						};
 						break;
 					case 'investors':
+						// let qwe;
+						// for (i=0;i<val.length;i++){
+						// 	qwe = await DB.query_func.get_nav(val[i].fond_id)
+						// 	val[i].money = (await DB.query_func.get_count_pai(val[i].id,val[i].fond_id)) * qwe; 
+						// }
+
 						break;
 						default:buf = JSON.stringify(val);
 						val = JSON.parse(buf);
-						for(i = 0;i < val.length-1;i++){
-						 	val[i].stringify = JSON.stringify(val[i])
-							console.log(val[i].stringify);
-						}
+						// for(i = 0;i < val.length-1;i++){
+						//  	val[i].stringify = JSON.stringify(val[i])
+						// 	console.log(val[i].stringify);
+						// }
 				}
-				self.view('db_raw', {
-					ok: 'Connection has been established successfully.',
-					data: val
-				});
+				console.log('JSON DATA');
+				self.json(val);
+				// self.view('db_raw', {
+				// 	ok: 'Connection has been established successfully.',
+				// 	data: val
+				// });
 			} catch (err) {
-				self.view('db_raw', {
+				self.json({
 					err: `Unable to connect to the database:${err}`
 				});
 			}

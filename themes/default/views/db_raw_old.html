@@ -1,6 +1,9 @@
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 @{import('db.css','db.js')}
 
+@{if model.err}
+<p>Ошибка. @{model.err}</p>
+@{else}
 <script type="text/x-template" id="modal-template">
   <transition name="modal">
       <div class="modal-mask">
@@ -36,7 +39,7 @@
 
 <div id="app" class="boxf">
   <button value="Добавить" name="add">Добавить</button>
-  <div v-if="load">
+  <div>
     <div class="row">
       @{foreach m in model.data[0]}
       @{if m.key != 'stringify'}

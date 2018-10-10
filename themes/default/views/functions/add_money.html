@@ -1,9 +1,37 @@
-<form action="" method="post">
-    <select name="id">
-        @{foreach m in model}
-            <option value="@{m.id}">@{m.name}</option>
-        @{end}
-    </select>
-    <input type="text" name="money">
-    <input type="submit" value="Вкинуть бабла">
-</form>
+@{import('add.js','add-money.css')}
+<div id="app">
+    <form v-if="load" action="" method="post" class="boxf" @submit.prevent="send_money">
+        <div class="row">
+            <p class="col">Фонды</p>
+            <select name="id" class="col" v-model="content.fond">
+                <option v-for="f in fonds" v-bind:value="f.id">{{f.name}}</option>
+                <!-- <option value="@{m.id}"></option> -->
+            </select>
+        </div>
+        <div class="row">
+            <p class="col">Изменение денег</p>
+            <input v-model.number="content.money" type="text" name="money" class="col">
+        </div>
+        <div class="row">
+            <p class="col">Компания</p>
+            <input v-model="content.company" type="text" class="col">
+        </div>
+        <div class="row">
+                <p class="col">Цена входа</p>
+                <input v-model.number="content.price_in" type="text" class="col">
+            </div>
+            <div class="row">
+                    <p class="col">Цена выхода</p>
+                    <input v-model.number="content.price_out" type="text" class="col">
+                </div>
+                <div class="row">
+                        <p class="col">Аллокация %</p>
+                        <input v-model.number="content.allocation" type="text" class="col">
+                    </div>
+        <div>
+            <p v-for="e in error" class="error">{{e}}</p>
+            <input type="submit" value="Вкинуть бабла">
+            <p>{{answer}}</p>
+        </div>
+    </form>
+</div>

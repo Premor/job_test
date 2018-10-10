@@ -1,0 +1,19 @@
+@{import('comission.js','add-money.css')}
+<div id="app">
+    <form v-if="load" action="" method="post" class="boxf">
+            <div class="row">
+                    <p class="col">Фонды</p>
+                    <select name="id" class="col" v-model="content.fond">
+                        <option v-for="f in fonds" v-bind:value="f.id"> {{f.name}} </option>
+                        <!-- <option value="@{m.id}"></option> -->
+                    </select>
+                </div>
+                <div class="row">
+                        <p class="col">Инвесторы</p>
+                        <select name="id" class="col" v-model="content.investor_id">
+                            <option v-for="f in investor" v-bind:value="f.id"> {{f.name}} </option>
+                            <!-- <option value="@{m.id}"></option> -->
+                        </select>
+                    </div>
+    </form>
+</div>

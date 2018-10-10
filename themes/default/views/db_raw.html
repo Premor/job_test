@@ -1,9 +1,5 @@
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 @{import('db.css','db.js')}
 
-@{if model.err}
-<p>Ошибка. @{model.err}</p>
-@{else}
 <script type="text/x-template" id="modal-template">
   <transition name="modal">
       <div class="modal-mask">
@@ -39,32 +35,23 @@
 
 <div id="app" class="boxf">
   <button value="Добавить" name="add">Добавить</button>
-  <div>
+  <div v-if="load">
     <div class="row">
-      @{foreach m in model.data[0]}
-      @{if m.key != 'stringify'}
-      <div class="col-xs">@{m.key}</div>
-      @{fi}
-      @{end}
+      <span v-for="(el,key) in content[0]" class="col-xs">{{key}} </span>
     </div>
-
-    @{foreach m in model.data}
-
-    <div class="row" @click="test(@{model.data})">
-      @{foreach e in m}
-      @{if e.key != 'stringify'}
-      <div class="col-xs">@{e.value}</div>
-      @{fi}
-      @{end}
+    <!-- <div v-for="(el_ar,num) in content" @click="showModal = true" class="row">
+      <editable-ell :content="el_ar" :num="num"></editable-ell>
+    </div> -->
+    <div v-for="(obj_el,num) in content" @click="modal(num)" class="row">
+      <span v-for="el in obj_el" class="col-xs">{{el}} </span>
     </div>
-    @{end}
   </div>
   <modal v-if="showModal" v-bind:test2="content" @close="showModal = false">
     <!--
               you can use custom content here to overwrite
               default content
             -->
-    <h3 slot="body"> {{ content }}
+    <h3 slot="body">
       <button @click="showModal = false;showModal2 = true">Изменить</button>
       <button @click="window.location.href = remove_url">Удалить</button>
     </h3>
@@ -75,9 +62,9 @@
       default content
     -->
     <div slot="body">
-      <form @submit.prevent="submit_change" method="post" >
-        <div v-for="(value, key) in content" class="row">
-          <span class="col-xs">{{key}}</span> <input v-bind:value="value" class="col-xs">
+      <form @submit.prevent="submit_change" method="post">
+        <div v-for="(value, key) in update_el" class="row">
+          <span class="col-xs">{{key}}</span> <input v-model="update_el[key]" class="col-xs">
         </div>
         <input type="submit" value="Отправить">
       </form>
@@ -86,4 +73,3 @@
 
 
 </div>
-@{fi}
